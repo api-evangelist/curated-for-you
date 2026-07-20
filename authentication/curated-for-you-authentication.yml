@@ -1,0 +1,36 @@
+generated: '2026-07-18'
+method: searched
+source: https://api.curatedforyou.io/docs
+docs: https://api.curatedforyou.io/docs
+summary:
+  types:
+  - oauth2
+  api_key_in: []
+  oauth2_flows:
+  - password
+  note: >-
+    The published OpenAPI (3.1) declares no components.securitySchemes; the
+    authentication contract below is captured from the API Usage Guide in the
+    spec info.description and the live login operation.
+schemes:
+- name: OAuth2Password
+  type: oauth2
+  flow: password
+  token_endpoint: https://api.curatedforyou.io/api/v2/users/login
+  token_request:
+    method: POST
+    content_type: application/x-www-form-urlencoded
+    fields:
+    - username
+    - password
+  bearer:
+    header: Authorization
+    format: Bearer <token>
+  token_ttl_minutes: 30
+  operation: openapi/curated-for-you-openapi-original.yml#login_api_v2_users_login_post
+  sources:
+  - openapi/curated-for-you-openapi-original.yml
+notes: >-
+  Permissions are provisioned per-organization at onboarding; additional
+  permissions are requested through a customer care representative. Access
+  is scoped to the companies a user is granted.
