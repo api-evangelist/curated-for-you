@@ -1,0 +1,255 @@
+openapi: 3.1.0
+info:
+  title: Curated for You Chronicle Feedback API
+  description: "\n# API Usage Guide\n\n## Overview\n\nThe Curated for You API provides endpoints to manage and retrieve\ninformation authentication, curations, companies, and attributes. This\nguide will help you understand how to authenticate and interact with\nthe API effectively. Your permissions are setup beforehand when you\njoin the organization, for additional permissions please contact your\ncustomer care representative.\n\n## Authentication\n\nThe Curated for You API uses OAuth 2.0 Bearer token\nauthentication. Follow these steps to authenticate your requests:\n\n```bash\ncurl -X POST 'https://api.curatedforyou.io/api/v1/user/login' \\\n  -H 'Content-Type: application/x-www-form-urlencoded' \\\n  --data-urlencode 'username=your_email@example.com' \\\n  --data-urlencode 'password=your_password'\n```\n\n### Use the Token\n\nAfter a successful login, you will receive a token. This token lasts\nfor 30 minutes(?). Include the received token in the Authorization header\nfor all subsequent requests\n\n```bash\ncurl -G 'https://api.curatedforyou.io/api/v2/endpoint' \\\n  -H 'Authorization: Bearer ENTER_AUTH_TOKEN_HERE' \\\n  -H 'accept: application/json'\n```\n\n## Get Curation Products Guide\n\n### 1. Get Company Information\n\nRetrieve the companies you have access to:\n\n```bash\ncurl -G 'https://api.curatedforyou.io/api/v2/companies' \\\n  -H 'Authorization: Bearer ENTER_AUTH_TOKEN_HERE' \\\n  -H 'accept: application/json' \\\n  -d 'projection=code_name' \\\n  -d 'projection=display_name'\n```\n\nIn this example, we use projection limit our response to only\n`display_name` and the `code_name`.\n\n### 2. Get Curations\n\n\nUse the found `company_id` to get the curations within that company:\n\n```bash\ncurl -G 'https://api.curatedforyou.io/api/v2/curations' \\\n  -H 'Authorization: Bearer ENTER_AUTH_TOKEN_HERE' \\\n  -H 'accept: application/json' \\\n  -d 'company_id=ENTER_COMPANY_ID_HERE' \\\n  -d 'sort_by=created_at:desc' \\\n  -d 'limit=50' \\\n  -d 'offset=0' \\\n  -d 'projection=curation_display_name' \\\n  -d 'projection=curation_group_number' \\\n  -d 'projection=curation_description' \\\n  -d 'projection=export_page_url_handle' \\\n  -d 'projection=company_product_ids'\n```\n\nThis example shows the different ways we can return information by\nspecifying different projections.\n\n### 3. Get Most Recent Snapshot\n\nAfter finding your specific curation we can query the snapshot that\nwas exported to determine what information we should be displaying.\n\nThe curation_group_number is the important id to use and the\ninformation on how and what was exported can be found in the\n`meta_data` field.\n\n```bash\ncurl -G 'https://api.curatedforyou.io/api/v2/curation_snapshots' \\\n  -H 'Authorization: Bearer ENTER_AUTH_TOKEN_HERE' \\\n  -H 'accept: application/json' \\\n  -d 'company_id=ENTER_COMPANY_ID_HERE' \\\n  -d 'curation_group_number=CURATION_GROUP_NUMBER_HERE' \\\n  -d 'sort_by=created_at:desc' \\\n  -d 'limit=50' \\\n  -d 'offset=0' \\\n  -d 'projection=products' \\\n  -d 'projection=meta_data' \\ # <<< where the last export time is found\n  -d 'projection=display_name' \\\n  -d 'projection=created_at'\n```\n"
+  version: 2.0.1
+  x-logo:
+    url: https://app.curatedforyou.io/cfy_logo.png
+tags:
+- name: Feedback
+paths:
+  /api/v2/feedback/:
+    post:
+      tags:
+      - Feedback
+      summary: Ingest AI feedback card (M2M only)
+      description: 'Ingest a new AI feedback card.
+
+
+        **Auth:** Clerk M2M token only. Regular user JWTs receive 403.
+
+
+        Auto-populates `curation_group_number`, `company_id`, and `product_ids`
+
+        from the curation record and blocks payload.
+
+
+        **Response 201:** `{id, curation_id, curation_group_number, created_at}`'
+      operationId: ingest_feedback_api_v2_feedback__post
+      parameters:
+      - name: authorization
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Authorization
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FeedbackIngestRequest'
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                title: Response Ingest Feedback Api V2 Feedback  Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      x-codeSamples:
+      - lang: Shell
+        source: "curl --location\\\n --request POST 'https://api.curatedforyou.io/api/v2/feedback/'\\\n--header 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NzMwNDkxNzgsImV4cCI6MTcwNDU4NTE3OCwiYXVkIjoid3d3LmV4YW1w'\\\n--header 'Content-Type: application/json'\\\n"
+        label: Curl
+      - lang: Python
+        source: "import requests\nimport json\n\nurl = \"https://api.curatedforyou.io/api/v2/feedback/\"\nheaders ={\n    \"Authorization\": \"Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NzMwNDkxNzgsImV4cCI6MTcwNDU4NTE3OCwiYXVkIjoid3d3LmV4YW1w\",\n    \"Content-Type\": \"application/json\"\n}\nresponse = requests.request(\"POST\", url, headers=headers)\nprint(response.json())"
+        label: Python3
+    get:
+      tags:
+      - Feedback
+      summary: List pending AI feedback cards for a curation
+      description: 'Return pending AI feedback cards for the given curation.
+
+
+        **Auth:** Regular user JWT with `org:curations:read` permission.
+
+
+        `action_context` is never included in the response.'
+      operationId: get_feedback_api_v2_feedback__get
+      parameters:
+      - name: curation_id
+        in: query
+        required: true
+        schema:
+          type: integer
+          description: Curation ID to fetch feedback for
+          title: Curation Id
+        description: Curation ID to fetch feedback for
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: Page number
+          default: 1
+          title: Page
+        description: Page number
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          description: Items per page (max 100)
+          default: 20
+          title: Limit
+        description: Items per page (max 100)
+      - name: authorization
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Authorization
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                title: Response Get Feedback Api V2 Feedback  Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      x-codeSamples:
+      - lang: Shell
+        source: "curl --location\\\n --request GET 'https://api.curatedforyou.io/api/v2/feedback/'\\\n--header 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NzMwNDkxNzgsImV4cCI6MTcwNDU4NTE3OCwiYXVkIjoid3d3LmV4YW1w'\\\n--header 'Content-Type: application/json'\\\n"
+        label: Curl
+      - lang: Python
+        source: "import requests\n\nurl = \"https://api.curatedforyou.io/api/v2/feedback/\"\nparams = {'curation_id': Query(PydanticUndefined), 'page': Query(1), 'limit': Query(20)}\nheaders ={\n    \"Authorization\": \"Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NzMwNDkxNzgsImV4cCI6MTcwNDU4NTE3OCwiYXVkIjoid3d3LmV4YW1w\",\n    \"Content-Type\": \"application/json\"\n}\nresponse = requests.request(\"GET\", url, headers=headers, params=params)\nprint(response.json())"
+        label: Python3
+  /api/v2/feedback/{feedback_id}/execute-action:
+    post:
+      tags:
+      - Feedback
+      summary: Execute an action on an AI feedback card
+      description: 'Execute an action on an AI feedback card.
+
+
+        **Auth:** Regular user JWT with `org:curations:manage` permission.
+
+
+        | `action_id`            | Behaviour                                          |
+
+        |------------------------|----------------------------------------------------|
+
+        | `dismiss`              | Sets `status=resolved` and `resolved_at`           |
+
+        | `apply_rules`          | Patches linked `CurationBrief` and resolves card   |
+
+        | `apply_product_swap`   | Swaps product at expected position and resolves    |'
+      operationId: execute_action_api_v2_feedback__feedback_id__execute_action_post
+      parameters:
+      - name: feedback_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Feedback Id
+      - name: authorization
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Authorization
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExecuteActionRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                title: Response Execute Action Api V2 Feedback  Feedback Id  Execute Action Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      x-codeSamples:
+      - lang: Shell
+        source: "curl --location\\\n --request POST 'https://api.curatedforyou.io/api/v2/feedback/{feedback_id}/execute-action'\\\n--header 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NzMwNDkxNzgsImV4cCI6MTcwNDU4NTE3OCwiYXVkIjoid3d3LmV4YW1w'\\\n--header 'Content-Type: application/json'\\\n"
+        label: Curl
+      - lang: Python
+        source: "import requests\nimport json\n\nurl = \"https://api.curatedforyou.io/api/v2/feedback/{feedback_id}/execute-action\"\nheaders ={\n    \"Authorization\": \"Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NzMwNDkxNzgsImV4cCI6MTcwNDU4NTE3OCwiYXVkIjoid3d3LmV4YW1w\",\n    \"Content-Type\": \"application/json\"\n}\nresponse = requests.request(\"POST\", url, headers=headers)\nprint(response.json())"
+        label: Python3
+components:
+  schemas:
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    FeedbackIngestRequest:
+      properties:
+        curation_id:
+          type: integer
+          title: Curation Id
+        blocks:
+          additionalProperties: true
+          type: object
+          title: Blocks
+        action_context:
+          additionalProperties: true
+          type: object
+          title: Action Context
+      type: object
+      required:
+      - curation_id
+      - blocks
+      - action_context
+      title: FeedbackIngestRequest
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ExecuteActionRequest:
+      properties:
+        action_id:
+          type: string
+          title: Action Id
+      type: object
+      required:
+      - action_id
+      title: ExecuteActionRequest

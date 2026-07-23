@@ -1,0 +1,298 @@
+openapi: 3.1.0
+info:
+  title: Curated for You Chronicle Curations API
+  description: "\n# API Usage Guide\n\n## Overview\n\nThe Curated for You API provides endpoints to manage and retrieve\ninformation authentication, curations, companies, and attributes. This\nguide will help you understand how to authenticate and interact with\nthe API effectively. Your permissions are setup beforehand when you\njoin the organization, for additional permissions please contact your\ncustomer care representative.\n\n## Authentication\n\nThe Curated for You API uses OAuth 2.0 Bearer token\nauthentication. Follow these steps to authenticate your requests:\n\n```bash\ncurl -X POST 'https://api.curatedforyou.io/api/v1/user/login' \\\n  -H 'Content-Type: application/x-www-form-urlencoded' \\\n  --data-urlencode 'username=your_email@example.com' \\\n  --data-urlencode 'password=your_password'\n```\n\n### Use the Token\n\nAfter a successful login, you will receive a token. This token lasts\nfor 30 minutes(?). Include the received token in the Authorization header\nfor all subsequent requests\n\n```bash\ncurl -G 'https://api.curatedforyou.io/api/v2/endpoint' \\\n  -H 'Authorization: Bearer ENTER_AUTH_TOKEN_HERE' \\\n  -H 'accept: application/json'\n```\n\n## Get Curation Products Guide\n\n### 1. Get Company Information\n\nRetrieve the companies you have access to:\n\n```bash\ncurl -G 'https://api.curatedforyou.io/api/v2/companies' \\\n  -H 'Authorization: Bearer ENTER_AUTH_TOKEN_HERE' \\\n  -H 'accept: application/json' \\\n  -d 'projection=code_name' \\\n  -d 'projection=display_name'\n```\n\nIn this example, we use projection limit our response to only\n`display_name` and the `code_name`.\n\n### 2. Get Curations\n\n\nUse the found `company_id` to get the curations within that company:\n\n```bash\ncurl -G 'https://api.curatedforyou.io/api/v2/curations' \\\n  -H 'Authorization: Bearer ENTER_AUTH_TOKEN_HERE' \\\n  -H 'accept: application/json' \\\n  -d 'company_id=ENTER_COMPANY_ID_HERE' \\\n  -d 'sort_by=created_at:desc' \\\n  -d 'limit=50' \\\n  -d 'offset=0' \\\n  -d 'projection=curation_display_name' \\\n  -d 'projection=curation_group_number' \\\n  -d 'projection=curation_description' \\\n  -d 'projection=export_page_url_handle' \\\n  -d 'projection=company_product_ids'\n```\n\nThis example shows the different ways we can return information by\nspecifying different projections.\n\n### 3. Get Most Recent Snapshot\n\nAfter finding your specific curation we can query the snapshot that\nwas exported to determine what information we should be displaying.\n\nThe curation_group_number is the important id to use and the\ninformation on how and what was exported can be found in the\n`meta_data` field.\n\n```bash\ncurl -G 'https://api.curatedforyou.io/api/v2/curation_snapshots' \\\n  -H 'Authorization: Bearer ENTER_AUTH_TOKEN_HERE' \\\n  -H 'accept: application/json' \\\n  -d 'company_id=ENTER_COMPANY_ID_HERE' \\\n  -d 'curation_group_number=CURATION_GROUP_NUMBER_HERE' \\\n  -d 'sort_by=created_at:desc' \\\n  -d 'limit=50' \\\n  -d 'offset=0' \\\n  -d 'projection=products' \\\n  -d 'projection=meta_data' \\ # <<< where the last export time is found\n  -d 'projection=display_name' \\\n  -d 'projection=created_at'\n```\n"
+  version: 2.0.1
+  x-logo:
+    url: https://app.curatedforyou.io/cfy_logo.png
+tags:
+- name: Curations
+  x-displayName: Curations
+paths:
+  /api/v2/curations/:
+    get:
+      tags:
+      - Curations
+      summary: Fetch Curations
+      description: "This endpoint returns filtered and sorted curations based on specified query parameters. The response includes\npagination information and supports projection to customize the fields returned.\n\n### Terminology\n- Curation Group Number: A permanent unique identifier assigned to each curation that remains constant even if the curation is renamed or modified\n\n- Company Product ID: An external product identifier provided by the customer for integration purposes\n\n### Brief fields (projection only)\n- page_type and parent_curation_cgn are returned only when requested in projection.\n  Values are taken from curation_briefs.attributes for this company and CGN with scope \"curation\"."
+      operationId: fetch_curations_api_v2_curations__get
+      parameters:
+      - name: company_id
+        in: query
+        required: true
+        schema:
+          type: integer
+          description: 'Company ID that owns the curations.
+
+            Required for filtering curations and permission checks.'
+          title: Company Id
+        description: 'Company ID that owns the curations.
+
+          Required for filtering curations and permission checks.'
+        example: 1
+      - name: curation_group_number
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: integer
+          - type: 'null'
+          description: 'Filter by Curation Group Numbers (CGNs).
+
+            Multiple CGNs can be provided to filter for multiple groups.'
+          title: Curation Group Number
+        description: 'Filter by Curation Group Numbers (CGNs).
+
+          Multiple CGNs can be provided to filter for multiple groups.'
+      - name: search
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: 'Search keyword to filter curations by display name.
+
+            Uses case-insensitive partial matching.'
+          title: Search
+        description: 'Search keyword to filter curations by display name.
+
+          Uses case-insensitive partial matching.'
+      - name: sort_by
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: 'Sort parameter in format ''field:direction:is_nulls_last''.
+
+            Defaults to ''curation_display_name:asc:true'' if not specified.
+
+
+            **Available sort fields:**
+
+            - curation_display_name: Sort by display name
+
+            - product_count: Sort by number of products
+
+            - last_export_date: Sort by last export date
+
+            - has_brief: Sort by whether curation brief exists
+
+            - freeze_body.frozen_at: Sort by when the curation was frozen
+
+            **Direction values:**
+
+            - asc: Ascending order
+
+            - desc: Descending order**is_nulls_last values:**
+
+            - true: Null values appear last
+
+            - false: Null values appear first
+
+
+            '
+          title: Sort By
+        description: 'Sort parameter in format ''field:direction:is_nulls_last''.
+
+          Defaults to ''curation_display_name:asc:true'' if not specified.
+
+
+          **Available sort fields:**
+
+          - curation_display_name: Sort by display name
+
+          - product_count: Sort by number of products
+
+          - last_export_date: Sort by last export date
+
+          - has_brief: Sort by whether curation brief exists
+
+          - freeze_body.frozen_at: Sort by when the curation was frozen
+
+          **Direction values:**
+
+          - asc: Ascending order
+
+          - desc: Descending order**is_nulls_last values:**
+
+          - true: Null values appear last
+
+          - false: Null values appear first
+
+
+          '
+        example: created_at:desc
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: 'Maximum number of curations to return.
+
+            Used for pagination.'
+          default: 50
+          title: Limit
+        description: 'Maximum number of curations to return.
+
+          Used for pagination.'
+        example: 50
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: 'Number of curations to skip.
+
+            Used for pagination.'
+          default: 0
+          title: Offset
+        description: 'Number of curations to skip.
+
+          Used for pagination.'
+        example: 0
+      - name: projection
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+          - type: 'null'
+          description: '**Available Fields:**
+
+            id, curation_display_name, curation_group_number, curation_description, export_page_url_handle, export_page_header, export_page_description, export_page_meta_title, export_page_meta_description, promoted_to_live_at, last_export_date, created_at, updated_at, geo, settings, product_count, company_product_ids
+
+
+            **Additional optional fields (projection only):**
+
+            page_type, parent_curation_cgn — from the curation brief (scope=curation) for this CGN; null when missing or invalid.'
+          title: Projection
+        description: '**Available Fields:**
+
+          id, curation_display_name, curation_group_number, curation_description, export_page_url_handle, export_page_header, export_page_description, export_page_meta_title, export_page_meta_description, promoted_to_live_at, last_export_date, created_at, updated_at, geo, settings, product_count, company_product_ids
+
+
+          **Additional optional fields (projection only):**
+
+          page_type, parent_curation_cgn — from the curation brief (scope=curation) for this CGN; null when missing or invalid.'
+        example:
+        - id
+        - curation_display_name
+        - curation_group_number
+        - curation_description
+        - export_page_url_handle
+        - company_product_ids
+      - name: authorization
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Authorization
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                title: Response Fetch Curations Api V2 Curations  Get
+              examples:
+                default:
+                  summary: Default Response
+                  value:
+                    data:
+                    - id: 123
+                      curation_display_name: Summer Collection 2024
+                      curation_group_number: 456
+                      curation_group_name: Summer Collections
+                      version_status: live
+                      product_count: 42
+                      first_product:
+                        product_id: 789
+                        image_url: https://example.com/image.jpg
+                        product_name: Summer Dress
+                    total: 100
+                    limit: 50
+                    offset: 0
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                invalid_status:
+                  summary: Invalid Status
+                  value:
+                    detail: 'Invalid status fields: [invalid_status]'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              examples:
+                no_permission:
+                  summary: No Permission
+                  value:
+                    detail: You do not have permission to read curations.
+                restricted_status:
+                  summary: Restricted Status
+                  value:
+                    detail: You do not have permission to read updating/inactive/archived curations.
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              example:
+                detail: Company not found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      x-codeSamples:
+      - lang: Shell
+        source: "curl --location\\\n --request GET 'https://api.curatedforyou.io/api/v2/curations/'\\\n--header 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NzMwNDkxNzgsImV4cCI6MTcwNDU4NTE3OCwiYXVkIjoid3d3LmV4YW1w'\\\n--header 'Content-Type: application/json'\\\n"
+        label: Curl
+      - lang: Python
+        source: "import requests\n\nurl = \"https://api.curatedforyou.io/api/v2/curations/\"\nparams = {'company_id': Query(PydanticUndefined), 'curation_owner_ids': Query(None), 'curation_group_number': Query(None), 'curation_cgns': Query(None), 'search': Query(None), 'status': Query(None), 'sort_by': Query(None), 'limit': Query(50), 'offset': Query(0), 'projection': Query(None), 'freeze': Query(None)}\nheaders ={\n    \"Authorization\": \"Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NzMwNDkxNzgsImV4cCI6MTcwNDU4NTE3OCwiYXVkIjoid3d3LmV4YW1w\",\n    \"Content-Type\": \"application/json\"\n}\nresponse = requests.request(\"GET\", url, headers=headers, params=params)\nprint(response.json())"
+        label: Python3
+components:
+  schemas:
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError

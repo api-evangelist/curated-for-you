@@ -1,0 +1,587 @@
+openapi: 3.1.0
+info:
+  title: Curated for You Chronicle shopify API
+  description: "\n# API Usage Guide\n\n## Overview\n\nThe Curated for You API provides endpoints to manage and retrieve\ninformation authentication, curations, companies, and attributes. This\nguide will help you understand how to authenticate and interact with\nthe API effectively. Your permissions are setup beforehand when you\njoin the organization, for additional permissions please contact your\ncustomer care representative.\n\n## Authentication\n\nThe Curated for You API uses OAuth 2.0 Bearer token\nauthentication. Follow these steps to authenticate your requests:\n\n```bash\ncurl -X POST 'https://api.curatedforyou.io/api/v1/user/login' \\\n  -H 'Content-Type: application/x-www-form-urlencoded' \\\n  --data-urlencode 'username=your_email@example.com' \\\n  --data-urlencode 'password=your_password'\n```\n\n### Use the Token\n\nAfter a successful login, you will receive a token. This token lasts\nfor 30 minutes(?). Include the received token in the Authorization header\nfor all subsequent requests\n\n```bash\ncurl -G 'https://api.curatedforyou.io/api/v2/endpoint' \\\n  -H 'Authorization: Bearer ENTER_AUTH_TOKEN_HERE' \\\n  -H 'accept: application/json'\n```\n\n## Get Curation Products Guide\n\n### 1. Get Company Information\n\nRetrieve the companies you have access to:\n\n```bash\ncurl -G 'https://api.curatedforyou.io/api/v2/companies' \\\n  -H 'Authorization: Bearer ENTER_AUTH_TOKEN_HERE' \\\n  -H 'accept: application/json' \\\n  -d 'projection=code_name' \\\n  -d 'projection=display_name'\n```\n\nIn this example, we use projection limit our response to only\n`display_name` and the `code_name`.\n\n### 2. Get Curations\n\n\nUse the found `company_id` to get the curations within that company:\n\n```bash\ncurl -G 'https://api.curatedforyou.io/api/v2/curations' \\\n  -H 'Authorization: Bearer ENTER_AUTH_TOKEN_HERE' \\\n  -H 'accept: application/json' \\\n  -d 'company_id=ENTER_COMPANY_ID_HERE' \\\n  -d 'sort_by=created_at:desc' \\\n  -d 'limit=50' \\\n  -d 'offset=0' \\\n  -d 'projection=curation_display_name' \\\n  -d 'projection=curation_group_number' \\\n  -d 'projection=curation_description' \\\n  -d 'projection=export_page_url_handle' \\\n  -d 'projection=company_product_ids'\n```\n\nThis example shows the different ways we can return information by\nspecifying different projections.\n\n### 3. Get Most Recent Snapshot\n\nAfter finding your specific curation we can query the snapshot that\nwas exported to determine what information we should be displaying.\n\nThe curation_group_number is the important id to use and the\ninformation on how and what was exported can be found in the\n`meta_data` field.\n\n```bash\ncurl -G 'https://api.curatedforyou.io/api/v2/curation_snapshots' \\\n  -H 'Authorization: Bearer ENTER_AUTH_TOKEN_HERE' \\\n  -H 'accept: application/json' \\\n  -d 'company_id=ENTER_COMPANY_ID_HERE' \\\n  -d 'curation_group_number=CURATION_GROUP_NUMBER_HERE' \\\n  -d 'sort_by=created_at:desc' \\\n  -d 'limit=50' \\\n  -d 'offset=0' \\\n  -d 'projection=products' \\\n  -d 'projection=meta_data' \\ # <<< where the last export time is found\n  -d 'projection=display_name' \\\n  -d 'projection=created_at'\n```\n"
+  version: 2.0.1
+  x-logo:
+    url: https://app.curatedforyou.io/cfy_logo.png
+tags:
+- name: shopify
+paths:
+  /api/v2/shopify/install:
+    get:
+      tags:
+      - shopify
+      summary: Install
+      description: 'Shopify OAuth install handler.
+
+
+        Verifies HMAC, stores nonce in Redis keyed by nonce value (not shop),
+
+        then redirects the merchant to Shopify''s OAuth consent screen.'
+      operationId: install_api_v2_shopify_install_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      x-codeSamples:
+      - lang: Shell
+        source: "curl --location\\\n --request GET 'https://api.curatedforyou.io/api/v2/shopify/install'\\\n--header 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NzMwNDkxNzgsImV4cCI6MTcwNDU4NTE3OCwiYXVkIjoid3d3LmV4YW1w'\\\n--header 'Content-Type: application/json'\\\n"
+        label: Curl
+      - lang: Python
+        source: "import requests\n\nurl = \"https://api.curatedforyou.io/api/v2/shopify/install\"\nheaders ={\n    \"Authorization\": \"Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NzMwNDkxNzgsImV4cCI6MTcwNDU4NTE3OCwiYXVkIjoid3d3LmV4YW1w\",\n    \"Content-Type\": \"application/json\"\n}\nresponse = requests.request(\"GET\", url, headers=headers)\nprint(response.json())"
+        label: Python3
+  /api/v2/shopify/callback:
+    get:
+      tags:
+      - shopify
+      summary: Callback
+      description: 'Shopify OAuth callback.
+
+
+        Verifies HMAC + nonce, exchanges code for access token, stores token in
+
+        GCP Secret Manager, upserts ShopifyStore DB row, redirects into Admin iframe.'
+      operationId: callback_api_v2_shopify_callback_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      x-codeSamples:
+      - lang: Shell
+        source: "curl --location\\\n --request GET 'https://api.curatedforyou.io/api/v2/shopify/callback'\\\n--header 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NzMwNDkxNzgsImV4cCI6MTcwNDU4NTE3OCwiYXVkIjoid3d3LmV4YW1w'\\\n--header 'Content-Type: application/json'\\\n"
+        label: Curl
+      - lang: Python
+        source: "import requests\n\nurl = \"https://api.curatedforyou.io/api/v2/shopify/callback\"\nheaders ={\n    \"Authorization\": \"Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NzMwNDkxNzgsImV4cCI6MTcwNDU4NTE3OCwiYXVkIjoid3d3LmV4YW1w\",\n    \"Content-Type\": \"application/json\"\n}\nresponse = requests.request(\"GET\", url, headers=headers)\nprint(response.json())"
+        label: Python3
+  /api/v2/shopify/app:
+    get:
+      tags:
+      - shopify
+      summary: App Status Page
+      description: 'Serve the Account Status page (embedded app home).
+
+
+        No session token required for the page load — App Bridge v4 injects the token
+
+        into subsequent fetch() calls automatically.'
+      operationId: app_status_page_api_v2_shopify_app_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            text/html:
+              schema:
+                type: string
+      x-codeSamples:
+      - lang: Shell
+        source: "curl --location\\\n --request GET 'https://api.curatedforyou.io/api/v2/shopify/app'\\\n--header 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NzMwNDkxNzgsImV4cCI6MTcwNDU4NTE3OCwiYXVkIjoid3d3LmV4YW1w'\\\n--header 'Content-Type: application/json'\\\n"
+        label: Curl
+      - lang: Python
+        source: "import requests\n\nurl = \"https://api.curatedforyou.io/api/v2/shopify/app\"\nheaders ={\n    \"Authorization\": \"Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NzMwNDkxNzgsImV4cCI6MTcwNDU4NTE3OCwiYXVkIjoid3d3LmV4YW1w\",\n    \"Content-Type\": \"application/json\"\n}\nresponse = requests.request(\"GET\", url, headers=headers)\nprint(response.json())"
+        label: Python3
+  /api/v2/shopify/app/collections:
+    get:
+      tags:
+      - shopify
+      summary: App Collections Page
+      description: Serve the Collections page of the embedded app.
+      operationId: app_collections_page_api_v2_shopify_app_collections_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            text/html:
+              schema:
+                type: string
+      x-codeSamples:
+      - lang: Shell
+        source: "curl --location\\\n --request GET 'https://api.curatedforyou.io/api/v2/shopify/app/collections'\\\n--header 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NzMwNDkxNzgsImV4cCI6MTcwNDU4NTE3OCwiYXVkIjoid3d3LmV4YW1w'\\\n--header 'Content-Type: application/json'\\\n"
+        label: Curl
+      - lang: Python
+        source: "import requests\n\nurl = \"https://api.curatedforyou.io/api/v2/shopify/app/collections\"\nheaders ={\n    \"Authorization\": \"Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NzMwNDkxNzgsImV4cCI6MTcwNDU4NTE3OCwiYXVkIjoid3d3LmV4YW1w\",\n    \"Content-Type\": \"application/json\"\n}\nresponse = requests.request(\"GET\", url, headers=headers)\nprint(response.json())"
+        label: Python3
+  /api/v2/shopify/ensure-installed:
+    post:
+      tags:
+      - shopify
+      summary: Ensure Installed
+      description: 'Exchange session token for offline access token on first load.
+
+
+        Managed installation bypasses /install and /callback — Shopify handles
+
+        consent itself and loads application_url directly in the iframe. This
+
+        endpoint detects the missing store record and exchanges the session token
+
+        (JWT) for a non-expiring offline access token via Shopify''s token exchange
+
+        API.
+
+
+        Idempotent: returns immediately if store record already exists.'
+      operationId: ensure_installed_api_v2_shopify_ensure_installed_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Ensure Installed Api V2 Shopify Ensure Installed Post
+      x-codeSamples:
+      - lang: Shell
+        source: "curl --location\\\n --request POST 'https://api.curatedforyou.io/api/v2/shopify/ensure-installed'\\\n--header 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NzMwNDkxNzgsImV4cCI6MTcwNDU4NTE3OCwiYXVkIjoid3d3LmV4YW1w'\\\n--header 'Content-Type: application/json'\\\n"
+        label: Curl
+      - lang: Python
+        source: "import requests\nimport json\n\nurl = \"https://api.curatedforyou.io/api/v2/shopify/ensure-installed\"\nheaders ={\n    \"Authorization\": \"Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NzMwNDkxNzgsImV4cCI6MTcwNDU4NTE3OCwiYXVkIjoid3d3LmV4YW1w\",\n    \"Content-Type\": \"application/json\"\n}\nresponse = requests.request(\"POST\", url, headers=headers)\nprint(response.json())"
+        label: Python3
+  /api/v2/shopify/status:
+    get:
+      tags:
+      - shopify
+      summary: Get Store Status
+      description: 'Return whether the store is linked to a CFY company account.
+
+
+        Returns unlinked (not 404) when the store is brand-new — there is a brief window
+
+        after OAuth where the session token is valid but the DB upsert hasn''t committed yet.'
+      operationId: get_store_status_api_v2_shopify_status_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StoreStatusResponse'
+      x-codeSamples:
+      - lang: Shell
+        source: "curl --location\\\n --request GET 'https://api.curatedforyou.io/api/v2/shopify/status'\\\n--header 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NzMwNDkxNzgsImV4cCI6MTcwNDU4NTE3OCwiYXVkIjoid3d3LmV4YW1w'\\\n--header 'Content-Type: application/json'\\\n"
+        label: Curl
+      - lang: Python
+        source: "import requests\n\nurl = \"https://api.curatedforyou.io/api/v2/shopify/status\"\nheaders ={\n    \"Authorization\": \"Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NzMwNDkxNzgsImV4cCI6MTcwNDU4NTE3OCwiYXVkIjoid3d3LmV4YW1w\",\n    \"Content-Type\": \"application/json\"\n}\nresponse = requests.request(\"GET\", url, headers=headers)\nprint(response.json())"
+        label: Python3
+  /api/v2/shopify/all-collections:
+    get:
+      tags:
+      - shopify
+      summary: List All Collections
+      description: 'Fetch all Shopify collections for this store via GraphQL.
+
+
+        Works for any installer regardless of company_id — reviewers see real data.
+
+        Paginates up to MAX_PAGES (500 collections).'
+      operationId: list_all_collections_api_v2_shopify_all_collections_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/AllCollectionResponse'
+                type: array
+                title: Response List All Collections Api V2 Shopify All Collections Get
+      x-codeSamples:
+      - lang: Shell
+        source: "curl --location\\\n --request GET 'https://api.curatedforyou.io/api/v2/shopify/all-collections'\\\n--header 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NzMwNDkxNzgsImV4cCI6MTcwNDU4NTE3OCwiYXVkIjoid3d3LmV4YW1w'\\\n--header 'Content-Type: application/json'\\\n"
+        label: Curl
+      - lang: Python
+        source: "import requests\n\nurl = \"https://api.curatedforyou.io/api/v2/shopify/all-collections\"\nheaders ={\n    \"Authorization\": \"Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NzMwNDkxNzgsImV4cCI6MTcwNDU4NTE3OCwiYXVkIjoid3d3LmV4YW1w\",\n    \"Content-Type\": \"application/json\"\n}\nresponse = requests.request(\"GET\", url, headers=headers)\nprint(response.json())"
+        label: Python3
+  /api/v2/shopify/collections:
+    get:
+      tags:
+      - shopify
+      summary: List Collections
+      description: 'Return CFY-managed collections for this store.
+
+
+        Note: this endpoint is for the export pipeline, not the embedded UI.
+
+        The embedded UI uses /all-collections (Tab 2) and /status (Tab 1).
+
+        Returns empty list if the store is not yet linked to a CFY company.'
+      operationId: list_collections_api_v2_shopify_collections_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/CollectionResponse'
+                type: array
+                title: Response List Collections Api V2 Shopify Collections Get
+      x-codeSamples:
+      - lang: Shell
+        source: "curl --location\\\n --request GET 'https://api.curatedforyou.io/api/v2/shopify/collections'\\\n--header 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NzMwNDkxNzgsImV4cCI6MTcwNDU4NTE3OCwiYXVkIjoid3d3LmV4YW1w'\\\n--header 'Content-Type: application/json'\\\n"
+        label: Curl
+      - lang: Python
+        source: "import requests\n\nurl = \"https://api.curatedforyou.io/api/v2/shopify/collections\"\nheaders ={\n    \"Authorization\": \"Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NzMwNDkxNzgsImV4cCI6MTcwNDU4NTE3OCwiYXVkIjoid3d3LmV4YW1w\",\n    \"Content-Type\": \"application/json\"\n}\nresponse = requests.request(\"GET\", url, headers=headers)\nprint(response.json())"
+        label: Python3
+  /api/v2/shopify/request-setup:
+    post:
+      tags:
+      - shopify
+      summary: Request Setup
+      description: 'Log an account setup request and notify CFY staff via Slack.
+
+
+        Idempotent per store per 24 hours — prevents flooding from repeated clicks.'
+      operationId: request_setup_api_v2_shopify_request_setup_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Request Setup Api V2 Shopify Request Setup Post
+      x-codeSamples:
+      - lang: Shell
+        source: "curl --location\\\n --request POST 'https://api.curatedforyou.io/api/v2/shopify/request-setup'\\\n--header 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NzMwNDkxNzgsImV4cCI6MTcwNDU4NTE3OCwiYXVkIjoid3d3LmV4YW1w'\\\n--header 'Content-Type: application/json'\\\n"
+        label: Curl
+      - lang: Python
+        source: "import requests\nimport json\n\nurl = \"https://api.curatedforyou.io/api/v2/shopify/request-setup\"\nheaders ={\n    \"Authorization\": \"Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NzMwNDkxNzgsImV4cCI6MTcwNDU4NTE3OCwiYXVkIjoid3d3LmV4YW1w\",\n    \"Content-Type\": \"application/json\"\n}\nresponse = requests.request(\"POST\", url, headers=headers)\nprint(response.json())"
+        label: Python3
+  /api/v2/shopify/collections/{handle}/resync:
+    post:
+      tags:
+      - shopify
+      summary: Resync Collection
+      description: 'Enqueue a CFY export for the given collection handle.
+
+
+        TODO: integrate with the export Cloud Tasks queue once the export pipeline
+
+        supports public-app merchants. Currently returns 200 with status=queued.'
+      operationId: resync_collection_api_v2_shopify_collections__handle__resync_post
+      parameters:
+      - name: handle
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Handle
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Resync Collection Api V2 Shopify Collections  Handle  Resync Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      x-codeSamples:
+      - lang: Shell
+        source: "curl --location\\\n --request POST 'https://api.curatedforyou.io/api/v2/shopify/collections/{handle}/resync'\\\n--header 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NzMwNDkxNzgsImV4cCI6MTcwNDU4NTE3OCwiYXVkIjoid3d3LmV4YW1w'\\\n--header 'Content-Type: application/json'\\\n"
+        label: Curl
+      - lang: Python
+        source: "import requests\nimport json\n\nurl = \"https://api.curatedforyou.io/api/v2/shopify/collections/{handle}/resync\"\nheaders ={\n    \"Authorization\": \"Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NzMwNDkxNzgsImV4cCI6MTcwNDU4NTE3OCwiYXVkIjoid3d3LmV4YW1w\",\n    \"Content-Type\": \"application/json\"\n}\nresponse = requests.request(\"POST\", url, headers=headers)\nprint(response.json())"
+        label: Python3
+  /api/v2/shopify/collections/{handle}/request-analysis:
+    post:
+      tags:
+      - shopify
+      summary: Request Collection Analysis
+      description: 'Request CFY analysis for an unmanaged collection.
+
+
+        Creates a ShopifyManagedCollection row with status=''requested''.
+
+        Idempotent — returns appropriate status on duplicate requests.
+
+        Works for unlinked stores (no company_id required).'
+      operationId: request_collection_analysis_api_v2_shopify_collections__handle__request_analysis_post
+      parameters:
+      - name: handle
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Handle
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnalysisRequestBody'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Request Collection Analysis Api V2 Shopify Collections  Handle  Request Analysis Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      x-codeSamples:
+      - lang: Shell
+        source: "curl --location\\\n --request POST 'https://api.curatedforyou.io/api/v2/shopify/collections/{handle}/request-analysis'\\\n--header 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NzMwNDkxNzgsImV4cCI6MTcwNDU4NTE3OCwiYXVkIjoid3d3LmV4YW1w'\\\n--header 'Content-Type: application/json'\\\n"
+        label: Curl
+      - lang: Python
+        source: "import requests\nimport json\n\nurl = \"https://api.curatedforyou.io/api/v2/shopify/collections/{handle}/request-analysis\"\nheaders ={\n    \"Authorization\": \"Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NzMwNDkxNzgsImV4cCI6MTcwNDU4NTE3OCwiYXVkIjoid3d3LmV4YW1w\",\n    \"Content-Type\": \"application/json\"\n}\nresponse = requests.request(\"POST\", url, headers=headers)\nprint(response.json())"
+        label: Python3
+  /api/v2/shopify/webhooks:
+    post:
+      tags:
+      - shopify
+      summary: Webhooks
+      description: 'Handle all Shopify webhook topics at a single endpoint.
+
+
+        All four GDPR + app/uninstalled topics are routed here.
+
+        HMAC is verified before any payload parsing.
+
+        Returns 200 for all valid requests, 401 for HMAC failures.'
+      operationId: webhooks_api_v2_shopify_webhooks_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Webhooks Api V2 Shopify Webhooks Post
+      x-codeSamples:
+      - lang: Shell
+        source: "curl --location\\\n --request POST 'https://api.curatedforyou.io/api/v2/shopify/webhooks'\\\n--header 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NzMwNDkxNzgsImV4cCI6MTcwNDU4NTE3OCwiYXVkIjoid3d3LmV4YW1w'\\\n--header 'Content-Type: application/json'\\\n"
+        label: Curl
+      - lang: Python
+        source: "import requests\nimport json\n\nurl = \"https://api.curatedforyou.io/api/v2/shopify/webhooks\"\nheaders ={\n    \"Authorization\": \"Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NzMwNDkxNzgsImV4cCI6MTcwNDU4NTE3OCwiYXVkIjoid3d3LmV4YW1w\",\n    \"Content-Type\": \"application/json\"\n}\nresponse = requests.request(\"POST\", url, headers=headers)\nprint(response.json())"
+        label: Python3
+  /api/v2/shopify/cd/{app_key}/install:
+    get:
+      tags:
+      - shopify
+      summary: Install
+      description: 'CD OAuth install handler.
+
+
+        Mirrors the public-app `/install`: verifies HMAC against the CD app''s
+
+        client_secret, stores a nonce keyed by value (not shop) to prevent
+
+        two-tab races, and redirects the merchant to Shopify''s consent screen.'
+      operationId: install_api_v2_shopify_cd__app_key__install_get
+      parameters:
+      - name: app_key
+        in: path
+        required: true
+        schema:
+          type: string
+          title: App Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      x-codeSamples:
+      - lang: Shell
+        source: "curl --location\\\n --request GET 'https://api.curatedforyou.io/api/v2/shopify/cd/{app_key}/install'\\\n--header 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NzMwNDkxNzgsImV4cCI6MTcwNDU4NTE3OCwiYXVkIjoid3d3LmV4YW1w'\\\n--header 'Content-Type: application/json'\\\n"
+        label: Curl
+      - lang: Python
+        source: "import requests\n\nurl = \"https://api.curatedforyou.io/api/v2/shopify/cd/{app_key}/install\"\nheaders ={\n    \"Authorization\": \"Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NzMwNDkxNzgsImV4cCI6MTcwNDU4NTE3OCwiYXVkIjoid3d3LmV4YW1w\",\n    \"Content-Type\": \"application/json\"\n}\nresponse = requests.request(\"GET\", url, headers=headers)\nprint(response.json())"
+        label: Python3
+  /api/v2/shopify/cd/{app_key}/callback:
+    get:
+      tags:
+      - shopify
+      summary: Callback
+      description: 'CD OAuth callback.
+
+
+        Verifies HMAC + nonce, exchanges the auth code for a token, validates
+
+        granted scopes, stores the token in Secret Manager at
+
+        `shopify_{app_key}__{slug}_key`, and upserts a ShopifyStore row with
+
+        `shopify_app_key={app_key}`.'
+      operationId: callback_api_v2_shopify_cd__app_key__callback_get
+      parameters:
+      - name: app_key
+        in: path
+        required: true
+        schema:
+          type: string
+          title: App Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      x-codeSamples:
+      - lang: Shell
+        source: "curl --location\\\n --request GET 'https://api.curatedforyou.io/api/v2/shopify/cd/{app_key}/callback'\\\n--header 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NzMwNDkxNzgsImV4cCI6MTcwNDU4NTE3OCwiYXVkIjoid3d3LmV4YW1w'\\\n--header 'Content-Type: application/json'\\\n"
+        label: Curl
+      - lang: Python
+        source: "import requests\n\nurl = \"https://api.curatedforyou.io/api/v2/shopify/cd/{app_key}/callback\"\nheaders ={\n    \"Authorization\": \"Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NzMwNDkxNzgsImV4cCI6MTcwNDU4NTE3OCwiYXVkIjoid3d3LmV4YW1w\",\n    \"Content-Type\": \"application/json\"\n}\nresponse = requests.request(\"GET\", url, headers=headers)\nprint(response.json())"
+        label: Python3
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    AnalysisRequestBody:
+      properties:
+        title:
+          type: string
+          title: Title
+      type: object
+      required:
+      - title
+      title: AnalysisRequestBody
+    AllCollectionResponse:
+      properties:
+        handle:
+          type: string
+          title: Handle
+        title:
+          type: string
+          title: Title
+        type:
+          type: string
+          title: Type
+        product_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Product Count
+        updated_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Updated At
+        managed_status:
+          type: string
+          title: Managed Status
+        admin_url:
+          type: string
+          title: Admin Url
+      type: object
+      required:
+      - handle
+      - title
+      - type
+      - product_count
+      - updated_at
+      - managed_status
+      - admin_url
+      title: AllCollectionResponse
+      description: All Shopify collections — returned by GET /all-collections.
+    CollectionResponse:
+      properties:
+        handle:
+          type: string
+          title: Handle
+        title:
+          type: string
+          title: Title
+        type:
+          type: string
+          title: Type
+        product_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Product Count
+        last_synced_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Synced At
+        status:
+          type: string
+          title: Status
+      type: object
+      required:
+      - handle
+      - title
+      - type
+      - product_count
+      - last_synced_at
+      - status
+      title: CollectionResponse
+      description: CFY-managed collections — returned by GET /collections.
+    StoreStatusResponse:
+      properties:
+        linked:
+          type: boolean
+          title: Linked
+        shop_domain:
+          type: string
+          title: Shop Domain
+      type: object
+      required:
+      - linked
+      - shop_domain
+      title: StoreStatusResponse
+      description: Store link status — returned by GET /status.

@@ -1,0 +1,106 @@
+openapi: 3.1.0
+info:
+  title: Curated for You Chronicle Users API
+  description: "\n# API Usage Guide\n\n## Overview\n\nThe Curated for You API provides endpoints to manage and retrieve\ninformation authentication, curations, companies, and attributes. This\nguide will help you understand how to authenticate and interact with\nthe API effectively. Your permissions are setup beforehand when you\njoin the organization, for additional permissions please contact your\ncustomer care representative.\n\n## Authentication\n\nThe Curated for You API uses OAuth 2.0 Bearer token\nauthentication. Follow these steps to authenticate your requests:\n\n```bash\ncurl -X POST 'https://api.curatedforyou.io/api/v1/user/login' \\\n  -H 'Content-Type: application/x-www-form-urlencoded' \\\n  --data-urlencode 'username=your_email@example.com' \\\n  --data-urlencode 'password=your_password'\n```\n\n### Use the Token\n\nAfter a successful login, you will receive a token. This token lasts\nfor 30 minutes(?). Include the received token in the Authorization header\nfor all subsequent requests\n\n```bash\ncurl -G 'https://api.curatedforyou.io/api/v2/endpoint' \\\n  -H 'Authorization: Bearer ENTER_AUTH_TOKEN_HERE' \\\n  -H 'accept: application/json'\n```\n\n## Get Curation Products Guide\n\n### 1. Get Company Information\n\nRetrieve the companies you have access to:\n\n```bash\ncurl -G 'https://api.curatedforyou.io/api/v2/companies' \\\n  -H 'Authorization: Bearer ENTER_AUTH_TOKEN_HERE' \\\n  -H 'accept: application/json' \\\n  -d 'projection=code_name' \\\n  -d 'projection=display_name'\n```\n\nIn this example, we use projection limit our response to only\n`display_name` and the `code_name`.\n\n### 2. Get Curations\n\n\nUse the found `company_id` to get the curations within that company:\n\n```bash\ncurl -G 'https://api.curatedforyou.io/api/v2/curations' \\\n  -H 'Authorization: Bearer ENTER_AUTH_TOKEN_HERE' \\\n  -H 'accept: application/json' \\\n  -d 'company_id=ENTER_COMPANY_ID_HERE' \\\n  -d 'sort_by=created_at:desc' \\\n  -d 'limit=50' \\\n  -d 'offset=0' \\\n  -d 'projection=curation_display_name' \\\n  -d 'projection=curation_group_number' \\\n  -d 'projection=curation_description' \\\n  -d 'projection=export_page_url_handle' \\\n  -d 'projection=company_product_ids'\n```\n\nThis example shows the different ways we can return information by\nspecifying different projections.\n\n### 3. Get Most Recent Snapshot\n\nAfter finding your specific curation we can query the snapshot that\nwas exported to determine what information we should be displaying.\n\nThe curation_group_number is the important id to use and the\ninformation on how and what was exported can be found in the\n`meta_data` field.\n\n```bash\ncurl -G 'https://api.curatedforyou.io/api/v2/curation_snapshots' \\\n  -H 'Authorization: Bearer ENTER_AUTH_TOKEN_HERE' \\\n  -H 'accept: application/json' \\\n  -d 'company_id=ENTER_COMPANY_ID_HERE' \\\n  -d 'curation_group_number=CURATION_GROUP_NUMBER_HERE' \\\n  -d 'sort_by=created_at:desc' \\\n  -d 'limit=50' \\\n  -d 'offset=0' \\\n  -d 'projection=products' \\\n  -d 'projection=meta_data' \\ # <<< where the last export time is found\n  -d 'projection=display_name' \\\n  -d 'projection=created_at'\n```\n"
+  version: 2.0.1
+  x-logo:
+    url: https://app.curatedforyou.io/cfy_logo.png
+tags:
+- name: Users
+  x-displayName: Users
+paths:
+  /api/v2/users/login:
+    post:
+      summary: Login
+      description: 'Authenticate yourself using your <a href="https://app.curatedforyou.io" target="_blank">CFY App</a> credentials.
+
+
+        The response contains a bearer token, which you will need to provide to the **Authorization** header to make other requests in the Curation API.'
+      operationId: login_api_v2_users_login_post
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Body_login_api_v2_users_login_post'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Token'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      x-codeSamples:
+      - lang: Shell
+        source: "curl --location\\\n --request POST 'https://api.curatedforyou.io/api/v2/users/login'\\\n--header 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NzMwNDkxNzgsImV4cCI6MTcwNDU4NTE3OCwiYXVkIjoid3d3LmV4YW1w'\\\n--header 'Content-Type: application/json'\\\n\\\n --data-raw '{\n    \"username\": \"jeffe@example.com\",\n    \"password\": \"secretpassword\"\n} '"
+        label: Curl
+      - lang: Python
+        source: "import requests\nimport json\n\nurl = \"https://api.curatedforyou.io/api/v2/users/login\"\npayload = json.dumps({\n    \"username\": \"jeffe@example.com\",\n    \"password\": \"secretpassword\"\n})\nheaders ={\n    \"Authorization\": \"Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NzMwNDkxNzgsImV4cCI6MTcwNDU4NTE3OCwiYXVkIjoid3d3LmV4YW1w\",\n    \"Content-Type\": \"application/json\"\n}\nresponse = requests.request(\"POST\", url, headers=headers, data=payload)\nprint(response.json())"
+        label: Python3
+      tags:
+      - Users
+components:
+  schemas:
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    Body_login_api_v2_users_login_post:
+      properties:
+        username:
+          type: string
+          title: Username
+          default: jeffe@example.com
+        password:
+          type: string
+          title: Password
+          default: secretpassword
+      type: object
+      title: Body_login_api_v2_users_login_post
+    Token:
+      properties:
+        access_token:
+          type: string
+          title: Access Token
+          description: Token used to authenticate future API requests
+          example: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NzMwNDkxNzgsImV4cCI6MTcwNDU4NTE3OCwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoianJvY2tldEBleGFtcGxlLmNvbSIsIkdpdmVuTmFtZSI6IkpvaG5ueSIsIlN1cm5hbWUiOiJSb2NrZXQiLCJFbWFpbCI6Impyb2NrZXRAZXhhbXBsZS5jb20iLCJSb2xlIjpbIk1hbmFnZXIiLCJQcm9qZWN0IEFkbWluaXN0cmF0b3IiXX0.Y-KnsQHFu4MV67cBTzf92jbt65ex-gQIXPBSwWz5gBM
+        token_type:
+          type: string
+          title: Token Type
+          description: Token type. Currently we only support OAuth 2.0 Bearer tokens
+          default: bearer
+      type: object
+      required:
+      - access_token
+      title: Token
