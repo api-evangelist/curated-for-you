@@ -1,0 +1,21 @@
+generated: '2026-07-18'
+method: generated
+source: openapi/curated-for-you-openapi-original.yml
+skills:
+- file: curated-for-you-retrieve-curations.md
+  name: Retrieve a company's curations
+  api: openapi/curated-for-you-openapi-original.yml
+  operations:
+  - login_api_v2_users_login_post
+  - get_companies_api_v2_companies__get
+  - fetch_curations_api_v2_curations__get
+- file: curated-for-you-shopify-sync.md
+  name: Sync and analyze a Shopify store's collections
+  api: openapi/curated-for-you-openapi-original.yml
+  operations:
+  - ensure_installed_api_v2_shopify_ensure_installed_post
+  - get_store_status_api_v2_shopify_status_get
+  - request_setup_api_v2_shopify_request_setup_post
+  - list_collections_api_v2_shopify_collections_get
+  - request_collection_analysis_api_v2_shopify_collections__handle__request_analysis_post
+  - resync_collection_api_v2_shopify_collections__handle__resync_post

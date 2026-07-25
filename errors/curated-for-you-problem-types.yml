@@ -1,0 +1,46 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/curated-for-you-openapi-original.yml
+format: fastapi-detail
+envelope:
+  field: detail
+  content_type: application/json
+  note: >-
+    Errors use the FastAPI convention (a JSON object with a `detail` field:
+    a string for 4xx, or an array of {loc, msg, type} for 422). This is NOT
+    RFC 9457 application/problem+json.
+problems:
+- status: 400
+  title: Bad Request
+  meaning: Invalid query parameters (e.g. unrecognized status field values).
+  example:
+    detail: "Invalid status fields: [invalid_status]"
+  source_operations:
+  - openapi/curated-for-you-openapi-original.yml#fetch_curations_api_v2_curations__get
+- status: 403
+  title: Forbidden
+  meaning: Authenticated caller lacks permission for the requested company or resource.
+  source_operations:
+  - openapi/curated-for-you-openapi-original.yml#fetch_curations_api_v2_curations__get
+- status: 404
+  title: Not Found
+  meaning: Requested resource does not exist or is not visible to the caller.
+  source_operations:
+  - openapi/curated-for-you-openapi-original.yml#fetch_curations_api_v2_curations__get
+- status: 422
+  title: Validation Error
+  meaning: Request failed schema validation; `detail[]` lists each field error.
+  schema: HTTPValidationError
+  detail_item: "{loc: [string|int], msg: string, type: string}"
+  source_operations:
+  - login_api_v2_users_login_post
+  - get_companies_api_v2_companies__get
+  - fetch_curations_api_v2_curations__get
+  - ingest_feedback_api_v2_feedback__post
+  - get_feedback_api_v2_feedback__get
+  - execute_action_api_v2_feedback__feedback_id__execute_action_post
+  - resync_collection_api_v2_shopify_collections__handle__resync_post
+  - request_collection_analysis_api_v2_shopify_collections__handle__request_analysis_post
+  - install_api_v2_shopify_cd__app_key__install_get
+  - callback_api_v2_shopify_cd__app_key__callback_get
+  - _relay_log_api_chronicle_log_post

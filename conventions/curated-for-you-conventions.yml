@@ -1,0 +1,50 @@
+generated: '2026-07-18'
+method: searched
+source: https://api.curatedforyou.io/docs
+docs: https://api.curatedforyou.io/docs
+authentication:
+  style: oauth2-password-bearer
+  detail: authentication/curated-for-you-authentication.yml
+idempotency:
+  supported: false
+  note: No idempotency-key header or contract is documented or present in the OpenAPI.
+pagination:
+  style: limit-offset
+  params:
+  - name: limit
+    default: 50
+  - name: offset
+    default: 0
+  - name: sort_by
+    format: "field:direction (e.g. created_at:desc)"
+  response_fields:
+  - data
+  - total
+  - limit
+  - offset
+sparse_fieldsets:
+  supported: true
+  param: projection
+  note: >-
+    Repeatable `projection` query parameter selects which fields are returned
+    (e.g. projection=display_name&projection=code_name).
+filtering:
+  params:
+  - company_id
+  - curation_group_number
+versioning:
+  scheme: uri-path
+  current: v2
+  detail: lifecycle/curated-for-you-lifecycle.yml
+error_envelope:
+  shape: fastapi-detail
+  format: application/json
+  fields:
+  - detail
+  validation:
+    status: 422
+    schema: HTTPValidationError
+    detail_items: "[{loc, msg, type}]"
+  detail: errors/curated-for-you-problem-types.yml
+rate_limiting:
+  documented: false

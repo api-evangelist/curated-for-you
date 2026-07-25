@@ -1,0 +1,24 @@
+{
+  "provider": "curated-for-you",
+  "sources": [
+    "curated-for-you-chronicle-api-openapi.yml",
+    "curated-for-you-companies-api-openapi.yml",
+    "curated-for-you-curations-api-openapi.yml",
+    "curated-for-you-feedback-api-openapi.yml",
+    "curated-for-you-shopify-api-openapi.yml",
+    "curated-for-you-users-api-openapi.yml"
+  ],
+  "outputs": [
+    "curated-for-you-chronicle-api-openapi.yml",
+    "curated-for-you-companies-api-openapi.yml",
+    "curated-for-you-curations-api-openapi.yml",
+    "curated-for-you-feedback-api-openapi.yml",
+    "curated-for-you-shopify-api-openapi.yml",
+    "curated-for-you-users-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

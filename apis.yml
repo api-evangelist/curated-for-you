@@ -1,7 +1,29 @@
 aid: curated-for-you
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/curated-for-you.png
 name: Curated for You
-description: Curated for You is a company surfaced as a portfolio company of techstars and added to the
-  API Evangelist network as a stub for enrichment. This profile is a lead awaiting the enrichment pipeline.
+description: >-
+  Curated for You is an Austin, Texas lifestyle-commerce platform (Techstars-backed)
+  that matches retail products to shoppers' lifestyles — places, affinities, and
+  trends — using a taxonomy of 1,000+ lifestyle concepts and AI to power product
+  discovery across storefronts, Shopify, web, social, email, and organic search.
+  The company works with retailers such as REVOLVE, Steve Madden, and Saks Off 5th,
+  and has partnered with Microsoft to bring AI-powered curations into Copilot. The
+  Curated for You API (v2, OpenAPI 3.1) lets integrators authenticate, discover the
+  companies they can access, retrieve curations and exported curation snapshots,
+  submit product feedback, and manage Shopify store installs, collections, and
+  analysis/resync jobs.
 url: https://raw.githubusercontent.com/api-evangelist/curated-for-you/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
@@ -11,10 +33,102 @@ x-tier: stub
 x-tier-reason: portfolio-lead
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-18'
 tags:
 - Company
-apis: []
+- E-Commerce
+- Retail
+- Product Discovery
+- Personalization
+- Artificial Intelligence
+- Curation
+- Shopify
+- Lifestyle Commerce
+apis:
+- aid: curated-for-you:curated-for-you-chronicle-api
+  name: Curated for You Chronicle API
+  description: The Chronicle API from Curated for You — 1 operation(s) for chronicle.
+  humanURL: https://api.curatedforyou.io/docs
+  baseURL: https://api.curatedforyou.io
+  tags:
+  - Chronicle
+  properties:
+  - type: OpenAPI
+    url: openapi/curated-for-you-chronicle-api-openapi.yml
+  - type: Documentation
+    url: https://api.curatedforyou.io/docs
+  - type: APIReference
+    url: https://api.curatedforyou.io/redoc
+- aid: curated-for-you:curated-for-you-companies-api
+  name: Curated for You Companies API
+  description: The Companies API from Curated for You — 1 operation(s) for companies.
+  humanURL: https://api.curatedforyou.io/docs
+  baseURL: https://api.curatedforyou.io
+  tags:
+  - Companies
+  properties:
+  - type: OpenAPI
+    url: openapi/curated-for-you-companies-api-openapi.yml
+  - type: Documentation
+    url: https://api.curatedforyou.io/docs
+  - type: APIReference
+    url: https://api.curatedforyou.io/redoc
+- aid: curated-for-you:curated-for-you-curations-api
+  name: Curated for You Curations API
+  description: The Curations API from Curated for You — 1 operation(s) for curations.
+  humanURL: https://api.curatedforyou.io/docs
+  baseURL: https://api.curatedforyou.io
+  tags:
+  - Curations
+  properties:
+  - type: OpenAPI
+    url: openapi/curated-for-you-curations-api-openapi.yml
+  - type: Documentation
+    url: https://api.curatedforyou.io/docs
+  - type: APIReference
+    url: https://api.curatedforyou.io/redoc
+- aid: curated-for-you:curated-for-you-feedback-api
+  name: Curated for You Feedback API
+  description: The Feedback API from Curated for You — 2 operation(s) for feedback.
+  humanURL: https://api.curatedforyou.io/docs
+  baseURL: https://api.curatedforyou.io
+  tags:
+  - Feedback
+  properties:
+  - type: OpenAPI
+    url: openapi/curated-for-you-feedback-api-openapi.yml
+  - type: Documentation
+    url: https://api.curatedforyou.io/docs
+  - type: APIReference
+    url: https://api.curatedforyou.io/redoc
+- aid: curated-for-you:curated-for-you-shopify-api
+  name: Curated for You shopify API
+  description: The shopify API from Curated for You — 14 operation(s) for shopify.
+  humanURL: https://api.curatedforyou.io/docs
+  baseURL: https://api.curatedforyou.io
+  tags:
+  - shopify
+  properties:
+  - type: OpenAPI
+    url: openapi/curated-for-you-shopify-api-openapi.yml
+  - type: Documentation
+    url: https://api.curatedforyou.io/docs
+  - type: APIReference
+    url: https://api.curatedforyou.io/redoc
+- aid: curated-for-you:curated-for-you-users-api
+  name: Curated for You Users API
+  description: The Users API from Curated for You — 1 operation(s) for users.
+  humanURL: https://api.curatedforyou.io/docs
+  baseURL: https://api.curatedforyou.io
+  tags:
+  - Users
+  properties:
+  - type: OpenAPI
+    url: openapi/curated-for-you-users-api-openapi.yml
+  - type: Documentation
+    url: https://api.curatedforyou.io/docs
+  - type: APIReference
+    url: https://api.curatedforyou.io/redoc
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -23,3 +137,44 @@ maintainers:
 common:
 - type: Website
   url: https://curatedforyou.io/
+- type: DeveloperPortal
+  url: https://api.curatedforyou.io/docs
+- type: Documentation
+  url: https://api.curatedforyou.io/docs
+- type: APIReference
+  url: https://api.curatedforyou.io/redoc
+- type: Blog
+  url: https://www.curatedforyou.io/resources
+- type: SignUp
+  url: https://app.curatedforyou.io
+- type: TermsOfService
+  url: https://www.curatedforyou.io/terms-conditions
+- type: PrivacyPolicy
+  url: https://www.curatedforyou.io/privacy-policy-1
+- type: Authentication
+  url: authentication/curated-for-you-authentication.yml
+- type: Conventions
+  url: conventions/curated-for-you-conventions.yml
+- type: ErrorCatalog
+  url: errors/curated-for-you-problem-types.yml
+- type: Conformance
+  url: conformance/curated-for-you-conformance.yml
+- type: DataModel
+  url: data-model/curated-for-you-data-model.yml
+- type: Lifecycle
+  url: lifecycle/curated-for-you-lifecycle.yml
+- type: MCPServer
+  url: mcp/curated-for-you-mcp.yml
+- type: LLMsTxt
+  url: llms/curated-for-you-llms.txt
+- type: WellKnown
+  url: well-known/curated-for-you-well-known.yml
+- type: DomainSecurity
+  url: security/curated-for-you-domain-security.yml
+- type: AgentSkill
+  url: skills/_index.yml
+x-enrichment:
+  date: '2026-07-19'
+  status: backfilled
+  pass: local-v1
+  note: backfilled from .gitignore signal + verified work evidence

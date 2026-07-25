@@ -1,0 +1,29 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/curated-for-you-openapi-original.yml
+standards:
+- id: openapi-3.1
+  conforms: true
+  evidence: Published OpenAPI document declares openapi 3.1.0.
+- id: oauth2
+  conforms: true
+  evidence: >-
+    Docs and login operation implement an OAuth2 password grant returning a
+    Bearer token (no components.securitySchemes declared in the spec).
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: Errors use the FastAPI `detail` envelope, not application/problem+json.
+- id: pagination-limit-offset
+  conforms: true
+  evidence: List endpoints accept limit/offset and return data/total/limit/offset.
+- id: idempotency
+  conforms: false
+  evidence: No idempotency-key contract documented or present in the spec.
+- id: json-api
+  conforms: false
+- id: fhir-r4
+  conforms: false
+- id: scim
+  conforms: false
+- id: odata
+  conforms: false

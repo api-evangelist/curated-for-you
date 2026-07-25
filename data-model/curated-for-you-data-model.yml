@@ -1,0 +1,66 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/curated-for-you-openapi-original.yml
+entities:
+- name: Company
+  description: A retailer/organization the authenticated user has access to.
+  key: company_id
+  fields:
+  - code_name
+  - display_name
+- name: Curation
+  description: A curated product collection belonging to a company.
+  key: id
+  fields:
+  - curation_display_name
+  - curation_group_number
+  - curation_group_name
+  - version_status
+  - product_count
+  - first_product
+- name: CurationSnapshot
+  description: An exported point-in-time version of a curation's products/metadata.
+  key: curation_group_number
+  fields:
+  - products
+  - meta_data
+  - display_name
+  - created_at
+- name: Product
+  key: product_id
+  fields:
+  - product_name
+  - image_url
+- name: ShopifyCollection
+  key: handle
+  fields:
+  - collection status
+- name: Feedback
+  key: feedback_id
+  fields:
+  - feedback ingest payload
+relationships:
+- from: Curation
+  to: Company
+  type: belongs_to
+  via: company_id
+- from: CurationSnapshot
+  to: Curation
+  type: belongs_to
+  via: curation_group_number
+- from: Company
+  to: Curation
+  type: has_many
+  via: company_id
+- from: Curation
+  to: CurationSnapshot
+  type: has_many
+  via: curation_group_number
+- from: Curation
+  to: Product
+  type: has_many
+  via: company_product_ids
+- from: Company
+  to: ShopifyCollection
+  type: has_many
+  via: store install

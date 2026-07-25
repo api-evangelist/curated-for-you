@@ -1,0 +1,19 @@
+generated: '2026-07-18'
+method: searched
+source: live probes of /.well-known/* on Curated for You hosts
+hosts:
+- host: https://api.curatedforyou.io
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+- host: https://curatedforyou.io
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+- host: https://www.curatedforyou.io
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+note: No /.well-known/ discovery documents are published on any host.

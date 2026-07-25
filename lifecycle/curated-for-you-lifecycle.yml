@@ -1,0 +1,18 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/curated-for-you-openapi-original.yml
+versioning:
+  scheme: uri-path
+  current: v2
+  spec_version: 2.0.1
+  note: >-
+    Endpoints are namespaced under /api/v2/. The auth guide references a legacy
+    /api/v1/user/login path; v2 is the current surface.
+deprecation:
+  policy_url: null
+  sunset_header: false
+  note: No published deprecation policy or Sunset/Deprecation header support found.
+sla:
+  url: null
+status_page: null
+deprecated_operations: []

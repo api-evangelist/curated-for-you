@@ -1,0 +1,34 @@
+# Curated for You
+
+> Curated for You is a lifestyle-commerce platform that matches retail products to shoppers' lifestyles (places, affinities, trends) using 1,000+ lifestyle concepts and AI, powering product discovery across storefronts, Shopify, web, social, email, and search. The Curated for You API (v2, OpenAPI 3.1) manages and retrieves companies, curations, curation snapshots, product feedback, and Shopify store integrations. Austin, TX; Techstars-backed.
+
+## Authentication
+- OAuth 2.0 password grant -> Bearer token. POST https://api.curatedforyou.io/api/v2/users/login (form-encoded username/password); token lasts ~30 minutes; send `Authorization: Bearer <token>`.
+
+## Conventions
+- Pagination: limit/offset; responses return data/total/limit/offset; sort via `sort_by=field:direction`.
+- Sparse fields: repeatable `projection` query parameter.
+- Errors: FastAPI `detail` envelope (not RFC 9457); validation errors are 422 with `detail[]` of {loc, msg, type}.
+- No documented idempotency or rate-limit contract.
+
+## APIs
+- [API docs (Swagger UI)](https://api.curatedforyou.io/docs)
+- [API docs (ReDoc)](https://api.curatedforyou.io/redoc)
+- [OpenAPI 3.1 schema](https://api.curatedforyou.io/api/schema.json)
+
+## Specs
+- [OpenAPI (harvested)](https://raw.githubusercontent.com/api-evangelist/curated-for-you/refs/heads/main/openapi/curated-for-you-openapi-original.yml)
+
+## Key operations
+- Companies: GET /api/v2/companies/
+- Curations: GET /api/v2/curations/
+- Feedback: POST/GET /api/v2/feedback/, POST /api/v2/feedback/{feedback_id}/execute-action
+- Shopify: install/callback, ensure-installed, status, collections, request-setup, request-analysis, resync, webhooks
+
+## Docs
+- [Website](https://curatedforyou.io/)
+- [About](https://www.curatedforyou.io/about)
+- [Resources / blog](https://www.curatedforyou.io/resources)
+- [App](https://app.curatedforyou.io)
+- [Terms](https://www.curatedforyou.io/terms-conditions)
+- [Privacy](https://www.curatedforyou.io/privacy-policy-1)

@@ -1,0 +1,31 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Curated for You API
+  version: 1.0.0
+extends: openapi/curated-for-you-openapi-original.yml
+actions:
+- target: $.info
+  update:
+    x-apievangelist-enrichment:
+      slug: curated-for-you
+      authentication: oauth2-password-bearer (see authentication/curated-for-you-authentication.yml)
+      pagination: limit-offset (see conventions/curated-for-you-conventions.yml)
+      error_envelope: fastapi-detail (see errors/curated-for-you-problem-types.yml)
+      idempotency: not-supported
+- target: $
+  update:
+    servers:
+    - url: https://api.curatedforyou.io
+      description: Production (the published spec omits servers[]).
+- target: $.components
+  update:
+    securitySchemes:
+      OAuth2Password:
+        type: oauth2
+        description: >-
+          Reconstructed from the API Usage Guide — the published spec declares
+          no securitySchemes. Bearer token obtained from POST /api/v2/users/login.
+        flows:
+          password:
+            tokenUrl: https://api.curatedforyou.io/api/v2/users/login
+            scopes: {}

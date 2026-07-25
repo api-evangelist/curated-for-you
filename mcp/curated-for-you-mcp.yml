@@ -1,0 +1,72 @@
+generated: '2026-07-18'
+method: derived
+status: candidate
+source: openapi/curated-for-you-openapi-original.yml
+server:
+  name: curated-for-you
+  transport: http
+  note: No official hosted MCP server published; tools derived one-per-operation as a candidate.
+tools:
+- name: fetch_curations_api_v2_curations__get
+  description: Fetch Curations
+  source_operation: openapi/curated-for-you-openapi-original.yml#fetch_curations_api_v2_curations__get
+- name: get_companies_api_v2_companies__get
+  description: Get Companies
+  source_operation: openapi/curated-for-you-openapi-original.yml#get_companies_api_v2_companies__get
+- name: login_api_v2_users_login_post
+  description: Login
+  source_operation: openapi/curated-for-you-openapi-original.yml#login_api_v2_users_login_post
+- name: install_api_v2_shopify_install_get
+  description: Install
+  source_operation: openapi/curated-for-you-openapi-original.yml#install_api_v2_shopify_install_get
+- name: callback_api_v2_shopify_callback_get
+  description: Callback
+  source_operation: openapi/curated-for-you-openapi-original.yml#callback_api_v2_shopify_callback_get
+- name: app_status_page_api_v2_shopify_app_get
+  description: App Status Page
+  source_operation: openapi/curated-for-you-openapi-original.yml#app_status_page_api_v2_shopify_app_get
+- name: app_collections_page_api_v2_shopify_app_collections_get
+  description: App Collections Page
+  source_operation: openapi/curated-for-you-openapi-original.yml#app_collections_page_api_v2_shopify_app_collections_get
+- name: ensure_installed_api_v2_shopify_ensure_installed_post
+  description: Ensure Installed
+  source_operation: openapi/curated-for-you-openapi-original.yml#ensure_installed_api_v2_shopify_ensure_installed_post
+- name: get_store_status_api_v2_shopify_status_get
+  description: Get Store Status
+  source_operation: openapi/curated-for-you-openapi-original.yml#get_store_status_api_v2_shopify_status_get
+- name: list_all_collections_api_v2_shopify_all_collections_get
+  description: List All Collections
+  source_operation: openapi/curated-for-you-openapi-original.yml#list_all_collections_api_v2_shopify_all_collections_get
+- name: list_collections_api_v2_shopify_collections_get
+  description: List Collections
+  source_operation: openapi/curated-for-you-openapi-original.yml#list_collections_api_v2_shopify_collections_get
+- name: request_setup_api_v2_shopify_request_setup_post
+  description: Request Setup
+  source_operation: openapi/curated-for-you-openapi-original.yml#request_setup_api_v2_shopify_request_setup_post
+- name: resync_collection_api_v2_shopify_collections__handle__resync_post
+  description: Resync Collection
+  source_operation: openapi/curated-for-you-openapi-original.yml#resync_collection_api_v2_shopify_collections__handle__resync_post
+- name: request_collection_analysis_api_v2_shopify_collections__handle__request_analysis_post
+  description: Request Collection Analysis
+  source_operation: openapi/curated-for-you-openapi-original.yml#request_collection_analysis_api_v2_shopify_collections__handle__request_analysis_post
+- name: webhooks_api_v2_shopify_webhooks_post
+  description: Webhooks
+  source_operation: openapi/curated-for-you-openapi-original.yml#webhooks_api_v2_shopify_webhooks_post
+- name: install_api_v2_shopify_cd__app_key__install_get
+  description: Install
+  source_operation: openapi/curated-for-you-openapi-original.yml#install_api_v2_shopify_cd__app_key__install_get
+- name: callback_api_v2_shopify_cd__app_key__callback_get
+  description: Callback
+  source_operation: openapi/curated-for-you-openapi-original.yml#callback_api_v2_shopify_cd__app_key__callback_get
+- name: ingest_feedback_api_v2_feedback__post
+  description: Ingest AI feedback card (M2M only)
+  source_operation: openapi/curated-for-you-openapi-original.yml#ingest_feedback_api_v2_feedback__post
+- name: get_feedback_api_v2_feedback__get
+  description: List pending AI feedback cards for a curation
+  source_operation: openapi/curated-for-you-openapi-original.yml#get_feedback_api_v2_feedback__get
+- name: execute_action_api_v2_feedback__feedback_id__execute_action_post
+  description: Execute an action on an AI feedback card
+  source_operation: openapi/curated-for-you-openapi-original.yml#execute_action_api_v2_feedback__feedback_id__execute_action_post
+- name: _relay_log_api_chronicle_log_post
+  description: ' Relay Log'
+  source_operation: openapi/curated-for-you-openapi-original.yml#_relay_log_api_chronicle_log_post
