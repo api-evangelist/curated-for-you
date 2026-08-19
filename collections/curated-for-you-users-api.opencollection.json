@@ -1,0 +1,33 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Curated for You Chronicle Users API",
+    "version": "2.0.1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Users",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Login",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v2/users/login",
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "Authenticate yourself using your <a href=\"https://app.curatedforyou.io\" target=\"_blank\">CFY App</a> credentials.\n\nThe response contains a bearer token, which you will need to provide to the **Authorization** header to make other requests in the Curation API."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

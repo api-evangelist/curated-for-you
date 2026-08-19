@@ -1,0 +1,35 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Curated for You Chronicle API",
+    "version": "2.0.1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Chronicle",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": " Relay Log",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/chronicle/log",
+            "headers": [
+              {
+                "name": "authorization",
+                "value": ""
+              }
+            ]
+          },
+          "docs": " Relay Log"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,43 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Curated for You Chronicle Companies API",
+    "version": "2.0.1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Companies",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Companies",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v2/companies/",
+            "headers": [
+              {
+                "name": "authorization",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "projection",
+                "value": "id,code_name,display_name",
+                "type": "query",
+                "description": "Fields to return."
+              }
+            ]
+          },
+          "docs": "This endpoint returns filtered & sorted companies.\n\nAUTHENTICATION (dual-mode):\n- Global admin (Clerk or legacy) → all companies.\n- Clerk non-admin → companies whose Clerk org the user belongs to (Redis).\n- Legacy non-admin → companies from permission_id=3 entries in DB."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

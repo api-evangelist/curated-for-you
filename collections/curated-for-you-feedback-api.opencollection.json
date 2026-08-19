@@ -1,0 +1,104 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Curated for You Chronicle Feedback API",
+    "version": "2.0.1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Feedback",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List pending AI feedback cards for a curation",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v2/feedback/",
+            "headers": [
+              {
+                "name": "authorization",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "curation_id",
+                "value": "",
+                "type": "query",
+                "description": "Curation ID to fetch feedback for"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Items per page (max 100)"
+              }
+            ]
+          },
+          "docs": "Return pending AI feedback cards for the given curation.\n\n**Auth:** Regular user JWT with `org:curations:read` permission.\n\n`action_context` is never included in the response."
+        },
+        {
+          "info": {
+            "name": "Ingest AI feedback card (M2M only)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v2/feedback/",
+            "headers": [
+              {
+                "name": "authorization",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Ingest a new AI feedback card.\n\n**Auth:** Clerk M2M token only. Regular user JWTs receive 403.\n\nAuto-populates `curation_group_number`, `company_id`, and `product_ids`\nfrom the curation record and blocks payload.\n\n**Response 201:** `{id, curation_id, curation_group_number, created_at}`"
+        },
+        {
+          "info": {
+            "name": "Execute an action on an AI feedback card",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v2/feedback/:feedback_id/execute-action",
+            "headers": [
+              {
+                "name": "authorization",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "feedback_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Execute an action on an AI feedback card.\n\n**Auth:** Regular user JWT with `org:curations:manage` permission.\n\n| `action_id`            | Behaviour                                          |\n|------------------------|----------------------------------------------------|\n| `dismiss`              | Sets `status=resolved` and `resolved_at`           |\n| `apply_rules`          | Patches linked `CurationBrief` and resolves card   |\n| `apply_product_swap`   | Swaps product at expected position and res"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

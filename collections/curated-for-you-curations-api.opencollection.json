@@ -1,0 +1,79 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Curated for You Chronicle Curations API",
+    "version": "2.0.1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Curations",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Fetch Curations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v2/curations/",
+            "headers": [
+              {
+                "name": "authorization",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "company_id",
+                "value": "1",
+                "type": "query",
+                "description": "Company ID that owns the curations.\nRequired for filtering curations and permission checks."
+              },
+              {
+                "name": "curation_group_number",
+                "value": "",
+                "type": "query",
+                "description": "Filter by Curation Group Numbers (CGNs).\nMultiple CGNs can be provided to filter for multiple groups."
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Search keyword to filter curations by display name.\nUses case-insensitive partial matching."
+              },
+              {
+                "name": "sort_by",
+                "value": "created_at:desc",
+                "type": "query",
+                "description": "Sort parameter in format 'field:direction:is_nulls_last'.\nDefaults to 'curation_display_name:asc:true' if not specified.\n\n**Available sort fields:**\n- curation_display_name: Sort by display name\n- product_count: Sort by number of products\n- last_export_date: Sort by last export date\n- has_brief: Sort by whether curation brief exists\n- freeze_body.frozen_at: Sort by when the curation was frozen\n**Direction values:**\n- asc: Ascending order\n- desc: Descending order**is_nulls_last values:**\n- true: Null values appear last\n- false: Null values appear first\n\n"
+              },
+              {
+                "name": "limit",
+                "value": "50",
+                "type": "query",
+                "description": "Maximum number of curations to return.\nUsed for pagination."
+              },
+              {
+                "name": "offset",
+                "value": "0",
+                "type": "query",
+                "description": "Number of curations to skip.\nUsed for pagination."
+              },
+              {
+                "name": "projection",
+                "value": "id,curation_display_name,curation_group_number,curation_description,export_page_url_handle,company_product_ids",
+                "type": "query",
+                "description": "**Available Fields:**\nid, curation_display_name, curation_group_number, curation_description, export_page_url_handle, export_page_header, export_page_description, export_page_meta_title, export_page_meta_description, promoted_to_live_at, last_export_date, created_at, updated_at, geo, settings, product_count, company_product_ids\n\n**Additional optional fields (projection only):**\npage_type, parent_curation_cgn — from the curation brief (scope=curation) for this CGN; null when missing or invalid."
+              }
+            ]
+          },
+          "docs": "This endpoint returns filtered and sorted curations based on specified query parameters. The response includes\npagination information and supports projection to customize the fields returned.\n\n### Terminology\n- Curation Group Number: A permanent unique identifier assigned to each curation that remains constant even if the curation is renamed or modified\n\n- Company Product ID: An external product identifier provided by the customer for integration purposes\n\n### Brief fields (projection only)\n- pa"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

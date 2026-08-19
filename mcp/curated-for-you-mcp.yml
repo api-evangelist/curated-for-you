@@ -70,3 +70,9 @@ tools:
 - name: _relay_log_api_chronicle_log_post
   description: ' Relay Log'
   source_operation: openapi/curated-for-you-openapi-original.yml#_relay_log_api_chronicle_log_post
+deployment:
+  mode: none
+  verified: derived
+  tools: 21
+  checked: '2026-08-12'
+  source: catalog MCP census
