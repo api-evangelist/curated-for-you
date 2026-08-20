@@ -107,6 +107,8 @@ apis:
   humanURL: https://api.curatedforyou.io/docs
   baseURL: https://api.curatedforyou.io
   tags:
+  - Shopify
+  tags_raw:
   - shopify
   properties:
   - type: OpenAPI
@@ -121,6 +123,8 @@ apis:
   humanURL: https://api.curatedforyou.io/docs
   baseURL: https://api.curatedforyou.io
   tags:
+  - User
+  tags_raw:
   - Users
   properties:
   - type: OpenAPI
