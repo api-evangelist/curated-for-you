@@ -1,24 +1,35 @@
 {
   "provider": "curated-for-you",
   "sources": [
-    "curated-for-you-chronicle-api-openapi.yml",
-    "curated-for-you-companies-api-openapi.yml",
-    "curated-for-you-curations-api-openapi.yml",
-    "curated-for-you-feedback-api-openapi.yml",
-    "curated-for-you-shopify-api-openapi.yml",
-    "curated-for-you-users-api-openapi.yml"
+    "_original/curated-for-you-openapi-original.yml"
   ],
   "outputs": [
     "curated-for-you-chronicle-api-openapi.yml",
     "curated-for-you-companies-api-openapi.yml",
     "curated-for-you-curations-api-openapi.yml",
     "curated-for-you-feedback-api-openapi.yml",
-    "curated-for-you-shopify-api-openapi.yml",
-    "curated-for-you-users-api-openapi.yml"
+    "curated-for-you-users-api-openapi.yml",
+    "curated-for-you-shopify-api-openapi.yml"
   ],
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "curated-for-you-openapi-original.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "curated-for-you-openapi-original.yml: tagged paths POST /api/v2/users/login -> Users",
+    "curated-for-you-openapi-original.yml: tagged paths POST /api/chronicle/log -> Chronicle",
+    "curated-for-you-openapi-original.yml: declared missing tag: Chronicle",
+    "curated-for-you-openapi-original.yml: declared missing tag: Feedback",
+    "curated-for-you-openapi-original.yml: declared missing tag: shopify",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "curated-for-you-chronicle-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "curated-for-you-companies-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "curated-for-you-curations-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "curated-for-you-feedback-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "curated-for-you-shopify-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "curated-for-you-users-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

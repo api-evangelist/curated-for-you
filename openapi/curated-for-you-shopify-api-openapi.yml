@@ -1,17 +1,25 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Curated for You Chronicle shopify API
-  description: "\n# API Usage Guide\n\n## Overview\n\nThe Curated for You API provides endpoints to manage and retrieve\ninformation authentication, curations, companies, and attributes. This\nguide will help you understand how to authenticate and interact with\nthe API effectively. Your permissions are setup beforehand when you\njoin the organization, for additional permissions please contact your\ncustomer care representative.\n\n## Authentication\n\nThe Curated for You API uses OAuth 2.0 Bearer token\nauthentication. Follow these steps to authenticate your requests:\n\n```bash\ncurl -X POST 'https://api.curatedforyou.io/api/v1/user/login' \\\n  -H 'Content-Type: application/x-www-form-urlencoded' \\\n  --data-urlencode 'username=your_email@example.com' \\\n  --data-urlencode 'password=your_password'\n```\n\n### Use the Token\n\nAfter a successful login, you will receive a token. This token lasts\nfor 30 minutes(?). Include the received token in the Authorization header\nfor all subsequent requests\n\n```bash\ncurl -G 'https://api.curatedforyou.io/api/v2/endpoint' \\\n  -H 'Authorization: Bearer ENTER_AUTH_TOKEN_HERE' \\\n  -H 'accept: application/json'\n```\n\n## Get Curation Products Guide\n\n### 1. Get Company Information\n\nRetrieve the companies you have access to:\n\n```bash\ncurl -G 'https://api.curatedforyou.io/api/v2/companies' \\\n  -H 'Authorization: Bearer ENTER_AUTH_TOKEN_HERE' \\\n  -H 'accept: application/json' \\\n  -d 'projection=code_name' \\\n  -d 'projection=display_name'\n```\n\nIn this example, we use projection limit our response to only\n`display_name` and the `code_name`.\n\n### 2. Get Curations\n\n\nUse the found `company_id` to get the curations within that company:\n\n```bash\ncurl -G 'https://api.curatedforyou.io/api/v2/curations' \\\n  -H 'Authorization: Bearer ENTER_AUTH_TOKEN_HERE' \\\n  -H 'accept: application/json' \\\n  -d 'company_id=ENTER_COMPANY_ID_HERE' \\\n  -d 'sort_by=created_at:desc' \\\n  -d 'limit=50' \\\n  -d 'offset=0' \\\n  -d 'projection=curation_display_name' \\\n  -d 'projection=curation_group_number' \\\n  -d 'projection=curation_description' \\\n  -d 'projection=export_page_url_handle' \\\n  -d 'projection=company_product_ids'\n```\n\nThis example shows the different ways we can return information by\nspecifying different projections.\n\n### 3. Get Most Recent Snapshot\n\nAfter finding your specific curation we can query the snapshot that\nwas exported to determine what information we should be displaying.\n\nThe curation_group_number is the important id to use and the\ninformation on how and what was exported can be found in the\n`meta_data` field.\n\n```bash\ncurl -G 'https://api.curatedforyou.io/api/v2/curation_snapshots' \\\n  -H 'Authorization: Bearer ENTER_AUTH_TOKEN_HERE' \\\n  -H 'accept: application/json' \\\n  -d 'company_id=ENTER_COMPANY_ID_HERE' \\\n  -d 'curation_group_number=CURATION_GROUP_NUMBER_HERE' \\\n  -d 'sort_by=created_at:desc' \\\n  -d 'limit=50' \\\n  -d 'offset=0' \\\n  -d 'projection=products' \\\n  -d 'projection=meta_data' \\ # <<< where the last export time is found\n  -d 'projection=display_name' \\\n  -d 'projection=created_at'\n```\n"
+  title: Curated for You Shopify API
+  description: '# API Usage Guide
+
+
+    ## Overview
+
+
+    The Curated for You API provides endpoints to manage and retrieve
+
+    information authentication, curations, companies, and attributes.'
   version: 2.0.1
   x-logo:
     url: https://app.curatedforyou.io/cfy_logo.png
 tags:
-- name: shopify
+- name: Shopify
 paths:
   /api/v2/shopify/install:
     get:
       tags:
-      - shopify
+      - Shopify
       summary: Install
       description: 'Shopify OAuth install handler.
 
@@ -36,7 +44,7 @@ paths:
   /api/v2/shopify/callback:
     get:
       tags:
-      - shopify
+      - Shopify
       summary: Callback
       description: 'Shopify OAuth callback.
 
@@ -61,7 +69,7 @@ paths:
   /api/v2/shopify/app:
     get:
       tags:
-      - shopify
+      - Shopify
       summary: App Status Page
       description: 'Serve the Account Status page (embedded app home).
 
@@ -87,7 +95,7 @@ paths:
   /api/v2/shopify/app/collections:
     get:
       tags:
-      - shopify
+      - Shopify
       summary: App Collections Page
       description: Serve the Collections page of the embedded app.
       operationId: app_collections_page_api_v2_shopify_app_collections_get
@@ -108,7 +116,7 @@ paths:
   /api/v2/shopify/ensure-installed:
     post:
       tags:
-      - shopify
+      - Shopify
       summary: Ensure Installed
       description: 'Exchange session token for offline access token on first load.
 
@@ -145,7 +153,7 @@ paths:
   /api/v2/shopify/status:
     get:
       tags:
-      - shopify
+      - Shopify
       summary: Get Store Status
       description: 'Return whether the store is linked to a CFY company account.
 
@@ -171,7 +179,7 @@ paths:
   /api/v2/shopify/all-collections:
     get:
       tags:
-      - shopify
+      - Shopify
       summary: List All Collections
       description: 'Fetch all Shopify collections for this store via GraphQL.
 
@@ -200,7 +208,7 @@ paths:
   /api/v2/shopify/collections:
     get:
       tags:
-      - shopify
+      - Shopify
       summary: List Collections
       description: 'Return CFY-managed collections for this store.
 
@@ -231,7 +239,7 @@ paths:
   /api/v2/shopify/request-setup:
     post:
       tags:
-      - shopify
+      - Shopify
       summary: Request Setup
       description: 'Log an account setup request and notify CFY staff via Slack.
 
@@ -257,7 +265,7 @@ paths:
   /api/v2/shopify/collections/{handle}/resync:
     post:
       tags:
-      - shopify
+      - Shopify
       summary: Resync Collection
       description: 'Enqueue a CFY export for the given collection handle.
 
@@ -298,7 +306,7 @@ paths:
   /api/v2/shopify/collections/{handle}/request-analysis:
     post:
       tags:
-      - shopify
+      - Shopify
       summary: Request Collection Analysis
       description: 'Request CFY analysis for an unmanaged collection.
 
@@ -347,7 +355,7 @@ paths:
   /api/v2/shopify/webhooks:
     post:
       tags:
-      - shopify
+      - Shopify
       summary: Webhooks
       description: 'Handle all Shopify webhook topics at a single endpoint.
 
@@ -377,7 +385,7 @@ paths:
   /api/v2/shopify/cd/{app_key}/install:
     get:
       tags:
-      - shopify
+      - Shopify
       summary: Install
       description: 'CD OAuth install handler.
 
@@ -417,7 +425,7 @@ paths:
   /api/v2/shopify/cd/{app_key}/callback:
     get:
       tags:
-      - shopify
+      - Shopify
       summary: Callback
       description: 'CD OAuth callback.
 
@@ -458,6 +466,41 @@ paths:
         label: Python3
 components:
   schemas:
+    CollectionResponse:
+      properties:
+        handle:
+          type: string
+          title: Handle
+        title:
+          type: string
+          title: Title
+        type:
+          type: string
+          title: Type
+        product_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Product Count
+        last_synced_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Synced At
+        status:
+          type: string
+          title: Status
+      type: object
+      required:
+      - handle
+      - title
+      - type
+      - product_count
+      - last_synced_at
+      - status
+      title: CollectionResponse
+      description: CFY-managed collections — returned by GET /collections.
     HTTPValidationError:
       properties:
         detail:
@@ -467,6 +510,20 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
+    StoreStatusResponse:
+      properties:
+        linked:
+          type: boolean
+          title: Linked
+        shop_domain:
+          type: string
+          title: Shop Domain
+      type: object
+      required:
+      - linked
+      - shop_domain
+      title: StoreStatusResponse
+      description: Store link status — returned by GET /status.
     ValidationError:
       properties:
         loc:
@@ -488,15 +545,6 @@ components:
       - msg
       - type
       title: ValidationError
-    AnalysisRequestBody:
-      properties:
-        title:
-          type: string
-          title: Title
-      type: object
-      required:
-      - title
-      title: AnalysisRequestBody
     AllCollectionResponse:
       properties:
         handle:
@@ -536,52 +584,12 @@ components:
       - admin_url
       title: AllCollectionResponse
       description: All Shopify collections — returned by GET /all-collections.
-    CollectionResponse:
+    AnalysisRequestBody:
       properties:
-        handle:
-          type: string
-          title: Handle
         title:
           type: string
           title: Title
-        type:
-          type: string
-          title: Type
-        product_count:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Product Count
-        last_synced_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Last Synced At
-        status:
-          type: string
-          title: Status
       type: object
       required:
-      - handle
       - title
-      - type
-      - product_count
-      - last_synced_at
-      - status
-      title: CollectionResponse
-      description: CFY-managed collections — returned by GET /collections.
-    StoreStatusResponse:
-      properties:
-        linked:
-          type: boolean
-          title: Linked
-        shop_domain:
-          type: string
-          title: Shop Domain
-      type: object
-      required:
-      - linked
-      - shop_domain
-      title: StoreStatusResponse
-      description: Store link status — returned by GET /status.
+      title: AnalysisRequestBody
