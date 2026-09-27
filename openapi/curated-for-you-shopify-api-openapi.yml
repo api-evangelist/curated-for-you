@@ -501,50 +501,6 @@ components:
       - status
       title: CollectionResponse
       description: CFY-managed collections — returned by GET /collections.
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    StoreStatusResponse:
-      properties:
-        linked:
-          type: boolean
-          title: Linked
-        shop_domain:
-          type: string
-          title: Shop Domain
-      type: object
-      required:
-      - linked
-      - shop_domain
-      title: StoreStatusResponse
-      description: Store link status — returned by GET /status.
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
     AllCollectionResponse:
       properties:
         handle:
@@ -593,3 +549,47 @@ components:
       required:
       - title
       title: AnalysisRequestBody
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    StoreStatusResponse:
+      properties:
+        linked:
+          type: boolean
+          title: Linked
+        shop_domain:
+          type: string
+          title: Shop Domain
+      type: object
+      required:
+      - linked
+      - shop_domain
+      title: StoreStatusResponse
+      description: Store link status — returned by GET /status.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError

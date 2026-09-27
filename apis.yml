@@ -114,7 +114,7 @@ apis:
   - type: APIReference
     url: https://api.curatedforyou.io/redoc
 - aid: curated-for-you:curated-for-you-shopify-api
-  name: Curated for You shopify API
+  name: Curated for You Shopify API
   description: The shopify API from Curated for You — 14 operation(s) for shopify.
   humanURL: https://api.curatedforyou.io/docs
   baseURL: https://api.curatedforyou.io

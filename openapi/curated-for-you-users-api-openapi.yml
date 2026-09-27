@@ -54,31 +54,6 @@ paths:
       - Users
 components:
   schemas:
-    Token:
-      properties:
-        access_token:
-          type: string
-          title: Access Token
-          description: Token used to authenticate future API requests
-          example: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NzMwNDkxNzgsImV4cCI6MTcwNDU4NTE3OCwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoianJvY2tldEBleGFtcGxlLmNvbSIsIkdpdmVuTmFtZSI6IkpvaG5ueSIsIlN1cm5hbWUiOiJSb2NrZXQiLCJFbWFpbCI6Impyb2NrZXRAZXhhbXBsZS5jb20iLCJSb2xlIjpbIk1hbmFnZXIiLCJQcm9qZWN0IEFkbWluaXN0cmF0b3IiXX0.Y-KnsQHFu4MV67cBTzf92jbt65ex-gQIXPBSwWz5gBM
-        token_type:
-          type: string
-          title: Token Type
-          description: Token type. Currently we only support OAuth 2.0 Bearer tokens
-          default: bearer
-      type: object
-      required:
-      - access_token
-      title: Token
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     ValidationError:
       properties:
         loc:
@@ -112,3 +87,28 @@ components:
           default: secretpassword
       type: object
       title: Body_login_api_v2_users_login_post
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    Token:
+      properties:
+        access_token:
+          type: string
+          title: Access Token
+          description: Token used to authenticate future API requests
+          example: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NzMwNDkxNzgsImV4cCI6MTcwNDU4NTE3OCwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoianJvY2tldEBleGFtcGxlLmNvbSIsIkdpdmVuTmFtZSI6IkpvaG5ueSIsIlN1cm5hbWUiOiJSb2NrZXQiLCJFbWFpbCI6Impyb2NrZXRAZXhhbXBsZS5jb20iLCJSb2xlIjpbIk1hbmFnZXIiLCJQcm9qZWN0IEFkbWluaXN0cmF0b3IiXX0.Y-KnsQHFu4MV67cBTzf92jbt65ex-gQIXPBSwWz5gBM
+        token_type:
+          type: string
+          title: Token Type
+          description: Token type. Currently we only support OAuth 2.0 Bearer tokens
+          default: bearer
+      type: object
+      required:
+      - access_token
+      title: Token

@@ -203,24 +203,6 @@ paths:
         label: Python3
 components:
   schemas:
-    ExecuteActionRequest:
-      properties:
-        action_id:
-          type: string
-          title: Action Id
-      type: object
-      required:
-      - action_id
-      title: ExecuteActionRequest
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     ValidationError:
       properties:
         loc:
@@ -242,6 +224,15 @@ components:
       - msg
       - type
       title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     FeedbackIngestRequest:
       properties:
         curation_id:
@@ -261,3 +252,12 @@ components:
       - blocks
       - action_context
       title: FeedbackIngestRequest
+    ExecuteActionRequest:
+      properties:
+        action_id:
+          type: string
+          title: Action Id
+      type: object
+      required:
+      - action_id
+      title: ExecuteActionRequest
