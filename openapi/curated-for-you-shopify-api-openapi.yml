@@ -540,15 +540,6 @@ components:
       - admin_url
       title: AllCollectionResponse
       description: All Shopify collections — returned by GET /all-collections.
-    AnalysisRequestBody:
-      properties:
-        title:
-          type: string
-          title: Title
-      type: object
-      required:
-      - title
-      title: AnalysisRequestBody
     ValidationError:
       properties:
         loc:
@@ -570,6 +561,15 @@ components:
       - msg
       - type
       title: ValidationError
+    AnalysisRequestBody:
+      properties:
+        title:
+          type: string
+          title: Title
+      type: object
+      required:
+      - title
+      title: AnalysisRequestBody
     StoreStatusResponse:
       properties:
         linked:

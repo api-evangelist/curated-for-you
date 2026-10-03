@@ -224,6 +224,15 @@ components:
       - msg
       - type
       title: ValidationError
+    ExecuteActionRequest:
+      properties:
+        action_id:
+          type: string
+          title: Action Id
+      type: object
+      required:
+      - action_id
+      title: ExecuteActionRequest
     HTTPValidationError:
       properties:
         detail:
@@ -252,12 +261,3 @@ components:
       - blocks
       - action_context
       title: FeedbackIngestRequest
-    ExecuteActionRequest:
-      properties:
-        action_id:
-          type: string
-          title: Action Id
-      type: object
-      required:
-      - action_id
-      title: ExecuteActionRequest
