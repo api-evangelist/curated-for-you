@@ -224,24 +224,6 @@ components:
       - msg
       - type
       title: ValidationError
-    ExecuteActionRequest:
-      properties:
-        action_id:
-          type: string
-          title: Action Id
-      type: object
-      required:
-      - action_id
-      title: ExecuteActionRequest
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     FeedbackIngestRequest:
       properties:
         curation_id:
@@ -261,3 +243,21 @@ components:
       - blocks
       - action_context
       title: FeedbackIngestRequest
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ExecuteActionRequest:
+      properties:
+        action_id:
+          type: string
+          title: Action Id
+      type: object
+      required:
+      - action_id
+      title: ExecuteActionRequest

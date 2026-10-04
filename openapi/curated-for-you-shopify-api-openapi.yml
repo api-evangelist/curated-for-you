@@ -466,41 +466,6 @@ paths:
         label: Python3
 components:
   schemas:
-    CollectionResponse:
-      properties:
-        handle:
-          type: string
-          title: Handle
-        title:
-          type: string
-          title: Title
-        type:
-          type: string
-          title: Type
-        product_count:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Product Count
-        last_synced_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Last Synced At
-        status:
-          type: string
-          title: Status
-      type: object
-      required:
-      - handle
-      - title
-      - type
-      - product_count
-      - last_synced_at
-      - status
-      title: CollectionResponse
-      description: CFY-managed collections — returned by GET /collections.
     AllCollectionResponse:
       properties:
         handle:
@@ -540,6 +505,15 @@ components:
       - admin_url
       title: AllCollectionResponse
       description: All Shopify collections — returned by GET /all-collections.
+    AnalysisRequestBody:
+      properties:
+        title:
+          type: string
+          title: Title
+      type: object
+      required:
+      - title
+      title: AnalysisRequestBody
     ValidationError:
       properties:
         loc:
@@ -561,15 +535,50 @@ components:
       - msg
       - type
       title: ValidationError
-    AnalysisRequestBody:
+    CollectionResponse:
       properties:
+        handle:
+          type: string
+          title: Handle
         title:
           type: string
           title: Title
+        type:
+          type: string
+          title: Type
+        product_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Product Count
+        last_synced_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Synced At
+        status:
+          type: string
+          title: Status
       type: object
       required:
+      - handle
       - title
-      title: AnalysisRequestBody
+      - type
+      - product_count
+      - last_synced_at
+      - status
+      title: CollectionResponse
+      description: CFY-managed collections — returned by GET /collections.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     StoreStatusResponse:
       properties:
         linked:
@@ -584,12 +593,3 @@ components:
       - shop_domain
       title: StoreStatusResponse
       description: Store link status — returned by GET /status.
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
