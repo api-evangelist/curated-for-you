@@ -1,0 +1,16 @@
+generated: '2026-10-12'
+method: none
+source:
+- https://zapier.com/apps/curated-for-you/integrations
+- https://n8n.io/integrations/curated-for-you/
+- https://composio.dev/toolkits/curated-for-you
+- https://monid.ai/tools/curated-for-you
+checked:
+- https://composio.dev/toolkits/curated-for-you
+- https://monid.ai/tools/curated-for-you
+- https://n8n.io/integrations/curated-for-you/
+- https://zapier.com/apps/curated-for-you/integrations
+summary: null
+marketplace_apps: []
+edges: []
+templates: []
