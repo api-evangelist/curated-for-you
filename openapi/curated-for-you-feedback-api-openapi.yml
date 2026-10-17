@@ -203,6 +203,43 @@ paths:
         label: Python3
 components:
   schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ExecuteActionRequest:
+      properties:
+        action_id:
+          type: string
+          title: Action Id
+      type: object
+      required:
+      - action_id
+      title: ExecuteActionRequest
+    FeedbackIngestRequest:
+      properties:
+        curation_id:
+          type: integer
+          title: Curation Id
+        blocks:
+          additionalProperties: true
+          type: object
+          title: Blocks
+        action_context:
+          additionalProperties: true
+          type: object
+          title: Action Context
+      type: object
+      required:
+      - curation_id
+      - blocks
+      - action_context
+      title: FeedbackIngestRequest
     ValidationError:
       properties:
         loc:
@@ -224,40 +261,3 @@ components:
       - msg
       - type
       title: ValidationError
-    FeedbackIngestRequest:
-      properties:
-        curation_id:
-          type: integer
-          title: Curation Id
-        blocks:
-          additionalProperties: true
-          type: object
-          title: Blocks
-        action_context:
-          additionalProperties: true
-          type: object
-          title: Action Context
-      type: object
-      required:
-      - curation_id
-      - blocks
-      - action_context
-      title: FeedbackIngestRequest
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    ExecuteActionRequest:
-      properties:
-        action_id:
-          type: string
-          title: Action Id
-      type: object
-      required:
-      - action_id
-      title: ExecuteActionRequest
