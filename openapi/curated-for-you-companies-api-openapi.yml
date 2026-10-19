@@ -9,7 +9,170 @@ info:
 
     The Curated for You API provides endpoints to manage and retrieve
 
-    information authentication, curations, companies, and attributes.'
+    information authentication, curations, companies, and attributes. This
+
+    guide will help you understand how to authenticate and interact with
+
+    the API effectively. Your permissions are setup beforehand when you
+
+    join the organization, for additional permissions please contact your
+
+    customer care representative.
+
+
+    ## Authentication
+
+
+    The Curated for You API uses OAuth 2.0 Bearer token
+
+    authentication. Follow these steps to authenticate your requests:
+
+
+    ```bash
+
+    curl -X POST ''https://api.curatedforyou.io/api/v1/user/login'' \
+
+    -H ''Content-Type: application/x-www-form-urlencoded'' \
+
+    --data-urlencode ''username=your_email@example.com'' \
+
+    --data-urlencode ''password=your_password''
+
+    ```
+
+
+    ### Use the Token
+
+
+    After a successful login, you will receive a token. This token lasts
+
+    for 30 minutes(?). Include the received token in the Authorization header
+
+    for all subsequent requests
+
+
+    ```bash
+
+    curl -G ''https://api.curatedforyou.io/api/v2/endpoint'' \
+
+    -H ''Authorization: Bearer ENTER_AUTH_TOKEN_HERE'' \
+
+    -H ''accept: application/json''
+
+    ```
+
+
+    ## Get Curation Products Guide
+
+
+    ### 1. Get Company Information
+
+
+    Retrieve the companies you have access to:
+
+
+    ```bash
+
+    curl -G ''https://api.curatedforyou.io/api/v2/companies'' \
+
+    -H ''Authorization: Bearer ENTER_AUTH_TOKEN_HERE'' \
+
+    -H ''accept: application/json'' \
+
+    -d ''projection=code_name'' \
+
+    -d ''projection=display_name''
+
+    ```
+
+
+    In this example, we use projection limit our response to only
+
+    `display_name` and the `code_name`.
+
+
+    ### 2. Get Curations
+
+
+    Use the found `company_id` to get the curations within that company:
+
+
+    ```bash
+
+    curl -G ''https://api.curatedforyou.io/api/v2/curations'' \
+
+    -H ''Authorization: Bearer ENTER_AUTH_TOKEN_HERE'' \
+
+    -H ''accept: application/json'' \
+
+    -d ''company_id=ENTER_COMPANY_ID_HERE'' \
+
+    -d ''sort_by=created_at:desc'' \
+
+    -d ''limit=50'' \
+
+    -d ''offset=0'' \
+
+    -d ''projection=curation_display_name'' \
+
+    -d ''projection=curation_group_number'' \
+
+    -d ''projection=curation_description'' \
+
+    -d ''projection=export_page_url_handle'' \
+
+    -d ''projection=company_product_ids''
+
+    ```
+
+
+    This example shows the different ways we can return information by
+
+    specifying different projections.
+
+
+    ### 3. Get Most Recent Snapshot
+
+
+    After finding your specific curation we can query the snapshot that
+
+    was exported to determine what information we should be displaying.
+
+
+    The curation_group_number is the important id to use and the
+
+    information on how and what was exported can be found in the
+
+    `meta_data` field.
+
+
+    ```bash
+
+    curl -G ''https://api.curatedforyou.io/api/v2/curation_snapshots'' \
+
+    -H ''Authorization: Bearer ENTER_AUTH_TOKEN_HERE'' \
+
+    -H ''accept: application/json'' \
+
+    -d ''company_id=ENTER_COMPANY_ID_HERE'' \
+
+    -d ''curation_group_number=CURATION_GROUP_NUMBER_HERE'' \
+
+    -d ''sort_by=created_at:desc'' \
+
+    -d ''limit=50'' \
+
+    -d ''offset=0'' \
+
+    -d ''projection=products'' \
+
+    -d ''projection=meta_data'' \ # <<< where the last export time is found
+
+    -d ''projection=display_name'' \
+
+    -d ''projection=created_at''
+
+    ```'
   version: 2.0.1
   x-logo:
     url: https://app.curatedforyou.io/cfy_logo.png
@@ -79,13 +242,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-      x-codeSamples:
-      - lang: Shell
-        source: "curl --location\\\n --request GET 'https://api.curatedforyou.io/api/v2/companies/'\\\n--header 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NzMwNDkxNzgsImV4cCI6MTcwNDU4NTE3OCwiYXVkIjoid3d3LmV4YW1w'\\\n--header 'Content-Type: application/json'\\\n"
-        label: Curl
-      - lang: Python
-        source: "import requests\n\nurl = \"https://api.curatedforyou.io/api/v2/companies/\"\nparams = {'code_name': Query(None), 'is_active': Query(None), 'visibility': Query(None), 'sort_by': Query(None), 'limit': Query(50), 'offset': Query(0), 'projection': Query(None), 'ai_attributes_enabled': Query(None), 'has_clerk_organization_id': Query(None), 'clerk_organization_id': Query(None)}\nheaders ={\n    \"Authorization\": \"Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NzMwNDkxNzgsImV4cCI6MTcwNDU4NTE3OCwiYXVkIjoid3d3LmV4YW1w\",\n    \"Content-Type\": \"application/json\"\n}\nresponse = requests.request(\"GET\", url, headers=headers, params=params)\nprint(response.json())"
-        label: Python3
 components:
   schemas:
     HTTPValidationError:
@@ -112,6 +268,11 @@ components:
         type:
           type: string
           title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
       type: object
       required:
       - loc

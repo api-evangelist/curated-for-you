@@ -57,20 +57,6 @@ tags:
 - Shopify
 - Lifestyle Commerce
 apis:
-- aid: curated-for-you:curated-for-you-chronicle-api
-  name: Curated for You Chronicle API
-  description: The Chronicle API from Curated for You — 1 operation(s) for chronicle.
-  humanURL: https://api.curatedforyou.io/docs
-  baseURL: https://api.curatedforyou.io
-  tags:
-  - Chronicle
-  properties:
-  - type: OpenAPI
-    url: openapi/curated-for-you-chronicle-api-openapi.yml
-  - type: Documentation
-    url: https://api.curatedforyou.io/docs
-  - type: APIReference
-    url: https://api.curatedforyou.io/redoc
 - aid: curated-for-you:curated-for-you-companies-api
   name: Curated for You Companies API
   description: The Companies API from Curated for You — 1 operation(s) for companies.
@@ -95,36 +81,6 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/curated-for-you-curations-api-openapi.yml
-  - type: Documentation
-    url: https://api.curatedforyou.io/docs
-  - type: APIReference
-    url: https://api.curatedforyou.io/redoc
-- aid: curated-for-you:curated-for-you-feedback-api
-  name: Curated for You Feedback API
-  description: The Feedback API from Curated for You — 2 operation(s) for feedback.
-  humanURL: https://api.curatedforyou.io/docs
-  baseURL: https://api.curatedforyou.io
-  tags:
-  - Feedback
-  properties:
-  - type: OpenAPI
-    url: openapi/curated-for-you-feedback-api-openapi.yml
-  - type: Documentation
-    url: https://api.curatedforyou.io/docs
-  - type: APIReference
-    url: https://api.curatedforyou.io/redoc
-- aid: curated-for-you:curated-for-you-shopify-api
-  name: Curated for You Shopify API
-  description: The shopify API from Curated for You — 14 operation(s) for shopify.
-  humanURL: https://api.curatedforyou.io/docs
-  baseURL: https://api.curatedforyou.io
-  tags:
-  - Shopify
-  tags_raw:
-  - shopify
-  properties:
-  - type: OpenAPI
-    url: openapi/curated-for-you-shopify-api-openapi.yml
   - type: Documentation
     url: https://api.curatedforyou.io/docs
   - type: APIReference

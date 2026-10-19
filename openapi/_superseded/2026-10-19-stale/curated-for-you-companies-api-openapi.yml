@@ -1,0 +1,120 @@
+openapi: 3.2.0
+info:
+  title: Curated for You Companies API
+  description: '# API Usage Guide
+
+
+    ## Overview
+
+
+    The Curated for You API provides endpoints to manage and retrieve
+
+    information authentication, curations, companies, and attributes.'
+  version: 2.0.1
+  x-logo:
+    url: https://app.curatedforyou.io/cfy_logo.png
+tags:
+- name: Companies
+  x-displayName: Companies
+paths:
+  /api/v2/companies/:
+    get:
+      tags:
+      - Companies
+      summary: Get Companies
+      description: 'This endpoint returns filtered & sorted companies.
+
+
+        AUTHENTICATION (dual-mode):
+
+        - Global admin (Clerk or legacy) → all companies.
+
+        - Clerk non-admin → companies whose Clerk org the user belongs to (Redis).
+
+        - Legacy non-admin → companies from permission_id=3 entries in DB.'
+      operationId: get_companies_api_v2_companies__get
+      parameters:
+      - name: projection
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+          - type: 'null'
+          description: Fields to return.
+          title: Projection
+        description: Fields to return.
+        example:
+        - id
+        - code_name
+        - display_name
+      - name: authorization
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Authorization
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                title: Response Get Companies Api V2 Companies  Get
+              examples:
+                default:
+                  summary: Default Response
+                  value:
+                    data:
+                    - code_name: example_company
+                      display_name: Example Company
+                      id: 191
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      x-codeSamples:
+      - lang: Shell
+        source: "curl --location\\\n --request GET 'https://api.curatedforyou.io/api/v2/companies/'\\\n--header 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NzMwNDkxNzgsImV4cCI6MTcwNDU4NTE3OCwiYXVkIjoid3d3LmV4YW1w'\\\n--header 'Content-Type: application/json'\\\n"
+        label: Curl
+      - lang: Python
+        source: "import requests\n\nurl = \"https://api.curatedforyou.io/api/v2/companies/\"\nparams = {'code_name': Query(None), 'is_active': Query(None), 'visibility': Query(None), 'sort_by': Query(None), 'limit': Query(50), 'offset': Query(0), 'projection': Query(None), 'ai_attributes_enabled': Query(None), 'has_clerk_organization_id': Query(None), 'clerk_organization_id': Query(None)}\nheaders ={\n    \"Authorization\": \"Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NzMwNDkxNzgsImV4cCI6MTcwNDU4NTE3OCwiYXVkIjoid3d3LmV4YW1w\",\n    \"Content-Type\": \"application/json\"\n}\nresponse = requests.request(\"GET\", url, headers=headers, params=params)\nprint(response.json())"
+        label: Python3
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
