@@ -64,6 +64,118 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Curated for You is a company surfaced as a portfolio company of techstars and added to the API Evangelist network as a stub for enrichment. This profile is a lead awaiting the enrichment pipeline.
+Curated for You is an Austin, Texas lifestyle-commerce platform (Techstars-backed) that matches retail products to shoppers' lifestyles — places, affinities, and trends — using a taxonomy of 1,000+ lifestyle concepts and AI to power product discovery across storefronts, Shopify, web, social, email, and organic search. The company works with retailers such as REVOLVE, Steve Madden, and Saks Off 5th, and has partnered with Microsoft to bring AI-powered curations into Copilot. The Curated for You API (v2, OpenAPI 3.1) lets integrators authenticate, discover the companies they can access, retrieve curations and exported curation snapshots, submit product feedback, and manage Shopify store installs, collections, and analysis/resync jobs.
 
-Backed by: techstars — https://curatedforyou.io/
+**Areas:** Company · E-Commerce · Retail · Product Discovery · Personalization · Artificial Intelligence · Curation · Shopify · Lifestyle Commerce
+
+## Curated for You on APIs.io
+
+Everything profiled for Curated for You is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/curated-for-you/](https://apis.io/providers/curated-for-you/)** — or go straight to one of the APIs or properties below.
+
+### APIs (6)
+
+- [Curated for You Chronicle API](https://apis.io/apis/curated-for-you/curated-for-you-chronicle-api/) — The Chronicle API from Curated for You — 1 operation(s) for chronicle.
+- [Curated for You Companies API](https://apis.io/apis/curated-for-you/curated-for-you-companies-api/) — The Companies API from Curated for You — 1 operation(s) for companies.
+- [Curated for You Curations API](https://apis.io/apis/curated-for-you/curated-for-you-curations-api/) — The Curations API from Curated for You — 1 operation(s) for curations.
+- [Curated for You Feedback API](https://apis.io/apis/curated-for-you/curated-for-you-feedback-api/) — The Feedback API from Curated for You — 2 operation(s) for feedback.
+- [Curated for You Shopify API](https://apis.io/apis/curated-for-you/curated-for-you-shopify-api/) — The shopify API from Curated for You — 14 operation(s) for shopify.
+- [Curated for You Users API](https://apis.io/apis/curated-for-you/curated-for-you-users-api/) — The Users API from Curated for You — 1 operation(s) for users.
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [curated-for-you](https://apis.io/servers/curated-for-you/curated-for-you/)
+
+#### Collections (6)
+
+Postman and Open Collection request collections.
+
+- [Curated for You Chronicle API](https://apis.io/collections/curated-for-you/open-curated-for-you-chronicle-api/)
+- [Curated for You Chronicle Companies API](https://apis.io/collections/curated-for-you/open-curated-for-you-companies-api/)
+- [Curated for You Chronicle Curations API](https://apis.io/collections/curated-for-you/open-curated-for-you-curations-api/)
+- [Curated for You Chronicle Feedback API](https://apis.io/collections/curated-for-you/open-curated-for-you-feedback-api/)
+- [Curated for You Chronicle shopify API](https://apis.io/collections/curated-for-you/open-curated-for-you-shopify-api/)
+- [Curated for You Chronicle Users API](https://apis.io/collections/curated-for-you/open-curated-for-you-users-api/)
+
+#### Overlays (1)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Curated For You Openapi Overlay](https://apis.io/overlays/curated-for-you/curated-for-you-openapi-overlay/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Curated For You Authentication](https://apis.io/security/curated-for-you/curated-for-you-authentication/)
+- [Curated For You Domain Security](https://apis.io/security/curated-for-you/curated-for-you-domain-security/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://curatedforyou.io/)
+- [Documentation](https://api.curatedforyou.io/docs)
+- [API reference](https://api.curatedforyou.io/redoc)
+- [Sign up](https://app.curatedforyou.io)
+- [Blog](https://www.curatedforyou.io/resources)
+- [Terms of service](https://www.curatedforyou.io/terms-conditions)
+- [Privacy policy](https://www.curatedforyou.io/privacy-policy-1)
+
+## API Evangelist rating
+
+**Kin Score 30.9** — thin · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 73.2 |
+| Contract quality | 39.9 |
+| Contract governance | 4.5 |
+| Operational transparency | 0.0 |
+| Developer ergonomics | 42.3 |
+| Access clarity | 21.1 |
+
+**Agent readiness 24.6** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | — |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | verified |
+| OpenAPI Examples | partial |
+| Rate Limit Signal | — |
+| Event Surface Described | — |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 22.7** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/curated-for-you/](https://apis.io/providers/curated-for-you/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Curated for You: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/curated-for-you/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
